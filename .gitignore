@@ -4,3 +4,4 @@ target/
 Slots.iml
 .project
 .settings/
+.classpath
