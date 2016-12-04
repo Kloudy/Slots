@@ -9,7 +9,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  * BukkitRunnableIntervalExecutor
  * 
  * Schedules BukkitRunnables to run with the given tick intervals
- *
  */
 public class BukkitRunnableIntervalScheduler 
 {
@@ -72,7 +71,7 @@ public class BukkitRunnableIntervalScheduler
 	}
 	
 	/**
-	 * Cancels all of the BukkitIntervalRunnable threads from running
+	 * Cancels all of the threads from running
 	 */
 	public void cancel()
 	{

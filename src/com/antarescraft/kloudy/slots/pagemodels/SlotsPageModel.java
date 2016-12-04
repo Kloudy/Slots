@@ -36,7 +36,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 	private boolean isRolling = false;
 	
 	//intervals that the slot images change images
-	private static final int[] intervals = new int[] { 8, 6, 4, 3, 3, 3, 3, 3, 3, 3, 4, 5, 6, 9 };
+	private static final int[] intervals = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 7, 7 };
 	
 	//array of images that could fill the slot as the result of a roll
 	private static final String[] images = new String[] { "question-block.gif", "coin.gif", "star.gif", "ring.gif", "tnt.gif", "trophy.gif" };
@@ -119,6 +119,8 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			t += interval;
 		}
 		
+		t+= 10;//add 10 tick delay to the end
+		
 		return t;
 	}
 	
@@ -145,7 +147,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 					public void call()
 					{
 						//runs when the slot stops rolling
-						player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 0.5f, 1);
+						//player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 0.5f, 1);
 					}
 				});
 		
@@ -156,7 +158,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 					public void call()
 					{
 						//runs when the slot stops rolling
-						player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 0.5f, 1);
+						//player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 0.5f, 1);
 					}
 				});
 		
@@ -167,7 +169,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 					public void call()
 					{
 						//runs when the slot stops rolling
-						player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 0.5f, 1);
+						//player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 0.5f, 1);
 					}
 				});
 		
@@ -199,8 +201,6 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		@Override
 		public void run()
 		{
-			player.playSound(player.getLocation(), Sound.BLOCK_TRIPWIRE_CLICK_ON, 0.5f, 1);
-			
 			playerGUIPage.removeComponent(slotImage.getId());//remove the old image
 			
 			int imageIndex = new Random().nextInt(images.length-1) + 1;
@@ -215,6 +215,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			prevSlotIndex = imageIndex;
 			
 			playerGUIPage.renderComponent(slotImage);//render new image
+			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BASS, 0.5f, 1);
 		}
 		
 		@Override

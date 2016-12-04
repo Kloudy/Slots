@@ -13,17 +13,6 @@ slot-machine:
         x: 0.8
         y: 0.8
 
-    slot-machine:
-      type: "image"
-      hidden: true
-      symmetrical: true
-      image-src: "slot-machine.png"
-      width: 85
-      height: 85
-      position:
-        x: 0
-        y: 0.9
-
     roll-btn:
       type: "button"
       mini: true
