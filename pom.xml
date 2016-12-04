@@ -11,6 +11,10 @@
             <id>Antarescraft</id>
             <url>http://nexus.antarescraft.com/content/groups/public/</url>
         </repository>
+        <repository>
+			<id>vault-repo</id>
+			<url>http://nexus.hc.to/content/repositories/pub_releases</url>
+		</repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -23,7 +27,13 @@
             <groupId>com.antarescraft.kloudy.hologuiapi</groupId>
             <artifactId>HoloGUIApi</artifactId>
             <scope>provided</scope>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.6</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <build>
