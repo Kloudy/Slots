@@ -7,7 +7,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ButtonComponent;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIPage;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ImageComponent;
@@ -16,9 +15,10 @@ import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageCloseHandler;
 import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageLoadHandler;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPage;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPageModel;
-import com.antarescraft.kloudy.util.BukkitIntervalRunnable;
-import com.antarescraft.kloudy.util.BukkitRunnableIntervalScheduler;
-import com.antarescraft.kloudy.util.ThreadSequenceCompleteCallback;
+import com.antarescraft.kloudy.slots.Slots;
+import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnable;
+import com.antarescraft.kloudy.slots.util.BukkitRunnableIntervalScheduler;
+import com.antarescraft.kloudy.slots.util.ThreadSequenceCompleteCallback;
 
 public class SlotsPageModel extends PlayerGUIPageModel
 {
@@ -43,7 +43,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 	
 	private static HashMap<String, String[][]> imageLines;
 	
-	public SlotsPageModel(final HoloGUIPlugin plugin, GUIPage guiPage, final Player player)
+	public SlotsPageModel(final Slots plugin, GUIPage guiPage, final Player player)
 	{
 		super(plugin, guiPage, player);
 		
@@ -140,27 +140,9 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		playerGUIPage.removeComponent(slot2.getId());
 		playerGUIPage.removeComponent(slot3.getId());
 		
-		slot1Roller = new BukkitRunnableIntervalScheduler(plugin, new RollerThread(slot1), intervals, 
-				new ThreadSequenceCompleteCallback()
-				{
-					@Override
-					public void call()
-					{
-						//runs when the slot stops rolling
-						//player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 0.5f, 1);
-					}
-				});
+		slot1Roller = new BukkitRunnableIntervalScheduler(plugin, new RollerThread(slot1), intervals);
 		
-		slot2Roller = new BukkitRunnableIntervalScheduler(plugin, new RollerThread(slot2), intervals, 
-				new ThreadSequenceCompleteCallback()
-				{
-					@Override
-					public void call()
-					{
-						//runs when the slot stops rolling
-						//player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 0.5f, 1);
-					}
-				});
+		slot2Roller = new BukkitRunnableIntervalScheduler(plugin, new RollerThread(slot2), intervals);
 		
 		slot3Roller = new BukkitRunnableIntervalScheduler(plugin, new RollerThread(slot3), intervals, 
 				new ThreadSequenceCompleteCallback()
@@ -215,7 +197,12 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			prevSlotIndex = imageIndex;
 			
 			playerGUIPage.renderComponent(slotImage);//render new image
-			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BASS, 0.5f, 1);
+			
+			Sound slotTickSound = ((Slots)plugin).getConfigManager().getSlotTickSound();
+			if(slotTickSound != null)
+			{
+				player.playSound(player.getLocation(), slotTickSound, 0.5f, 1);
+			}
 		}
 		
 		@Override

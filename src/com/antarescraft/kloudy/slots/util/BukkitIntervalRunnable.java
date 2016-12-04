@@ -1,4 +1,4 @@
-package com.antarescraft.kloudy.util;
+package com.antarescraft.kloudy.slots.util;
 
 import org.bukkit.scheduler.BukkitRunnable;
 

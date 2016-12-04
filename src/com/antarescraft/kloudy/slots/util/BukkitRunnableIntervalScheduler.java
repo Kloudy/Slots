@@ -1,4 +1,4 @@
-package com.antarescraft.kloudy.util;
+package com.antarescraft.kloudy.slots.util;
 
 import java.util.ArrayList;
 
@@ -18,6 +18,11 @@ public class BukkitRunnableIntervalScheduler
 	private ThreadSequenceCompleteCallback callback;
 	
 	private ArrayList<BukkitRunnable> threads;
+	
+	public BukkitRunnableIntervalScheduler(Plugin plugin, BukkitIntervalRunnable thread, int[] intervals)
+	{
+		this(plugin, thread, intervals, null);
+	}
 	
 	public BukkitRunnableIntervalScheduler(Plugin plugin, BukkitIntervalRunnable thread, int[] intervals, 
 			ThreadSequenceCompleteCallback callback)
