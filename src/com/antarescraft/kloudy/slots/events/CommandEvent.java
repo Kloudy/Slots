@@ -5,8 +5,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.antarescraft.kloudy.plugincore.command.CommandHandler;
-import com.antarescraft.kloudy.plugincore.command.CommandParser;
+import com.antarescraft.kloudy.hologuiapi.plugincore.command.CommandHandler;
+import com.antarescraft.kloudy.hologuiapi.plugincore.command.CommandParser;
 import com.antarescraft.kloudy.slots.Slots;
 import com.antarescraft.kloudy.slots.pagemodels.SlotsPageModel;
 
@@ -25,7 +25,7 @@ public class CommandEvent implements CommandExecutor
 		return CommandParser.parseCommand(plugin, this, "slots", cmd.getName(), sender, args);
 	}
 
-	@CommandHandler(description = "Opens the Slots! GUI",
+	@CommandHandler(description = "Opens the Slots GUI",
 			mustBePlayer = true, permission = "slots.play", subcommands = "play")
 	public void play(CommandSender sender, String[] args)
 	{

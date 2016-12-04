@@ -1,5 +1,5 @@
 name: Slots
-main: com.antarescraft.kloudy.slots
+main: com.antarescraft.kloudy.slots.Slots
 version: 1.0
 author: Kloudy
 website: www.antarescraft.com
@@ -7,17 +7,17 @@ website: www.antarescraft.com
 depend: [HoloGUIApi]
 
 commands:
-  ugd:
-    description: used to define commands for the Slots! plugin
+  slots:
+    description: used to define commands for the Slots plugin
 
 permissions:
 
   slots.admin:
-    description: Allows a player to use Slots! admin commands
+    description: Allows a player to use Slots admin commands
     default: op
     children:
       unitygen.display: true
 
   slots.play:
-    description: Allows a player to play Slots!
+    description: Allows a player to play Slots
     default: true

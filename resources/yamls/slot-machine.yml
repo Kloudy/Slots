@@ -1,44 +1,65 @@
 slot-machine:
-	
+
   components:
-    	
+
     close-btn:
-	  type: "button"
-	  label: "Close Menu"
-	  symmetrical: true
-	  mini: true
-	  icon: "x-red.gif"
-	  onclick-sound: "UI_BUTTON_CLICK"
-	  position:
-	    x: 0.8
-	    y: 0.8
-	      
+      type: "button"
+      label: "Close Menu"
+      symmetrical: true
+      mini: true
+      icon: "x-red.gif"
+      onclick-sound: "UI_BUTTON_CLICK"
+      position:
+        x: 0.8
+        y: 0.8
+
+    slot-machine:
+      type: "image"
+      hidden: true
+      symmetrical: true
+      image-src: "slot-machine.png"
+      width: 85
+      height: 85
+      position:
+        x: 0
+        y: 0.9
+
+    roll-btn:
+      type: "button"
+      mini: true
+      symmetrical: true
+      icon: "confirm.png"
+      onclick-sound: "UI_BUTTON_CLICK"
+      position:
+        x: 0.8
+        y: 0.3
+
     slot-1:
       type: "image"
-      image-src: "star.gif"
+      image-src: "question-block.gif"
       symmetrical: true
       width: 18
       height: 18
       position:
-        x: -0.2
-        y: 0.3
-        
+        x: -0.4
+        y: 0.2
+
     slot-2:
       type: "image"
-      image-src: "star.gif"
+      image-src: "question-block.gif"
       symmetrical: true
       width: 18
       height: 18
       position:
         x: 0
-        y: 0.3
+        y: 0.2
 
     slot-3:
       type: "image"
-      image-src: "star.gif"
+      image-src: "question-block.gif"
       symmetrical: true
       width: 18
       height: 18
       position:
-        x: 0.2
-        y: 0.3
+        x: 0.4
+        y: 0.2
