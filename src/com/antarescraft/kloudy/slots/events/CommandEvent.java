@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.antarescraft.kloudy.hologuiapi.plugincore.command.CommandHandler;
 import com.antarescraft.kloudy.hologuiapi.plugincore.command.CommandParser;
-import com.antarescraft.kloudy.plugincore.messaging.MessageManager;
+import com.antarescraft.kloudy.hologuiapi.plugincore.messaging.MessageManager;
 import com.antarescraft.kloudy.slots.Slots;
 import com.antarescraft.kloudy.slots.pagemodels.SlotsPageModel;
 

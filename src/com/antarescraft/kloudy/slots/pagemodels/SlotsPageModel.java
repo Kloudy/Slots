@@ -103,9 +103,9 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			public void onPageClose()
 			{
 				//cancel all of the slot roller threads
-				slot1Roller.cancel();
-				slot2Roller.cancel();
-				slot3Roller.cancel();
+				if(slot1Roller != null)slot1Roller.cancel();
+				if(slot2Roller != null)slot2Roller.cancel();
+				if(slot3Roller != null)slot3Roller.cancel();
 			}
 		});
 	}
@@ -184,9 +184,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		public void run(BukkitIntervalRunnableContext context)
 		{
 			playerGUIPage.removeComponent(slotImage.getId());//remove the old image
-			
-			System.out.println("context: " + context);
-			
+						
 			int prevIndex = 0;
 			if(context.containsKey("prevIndex"))
 			{
@@ -194,13 +192,9 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			}
 			
 			int imageIndex = new Random().nextInt(images.length-1) + 1;
-			System.out.println("prev: " + prevIndex);
-			System.out.println("current: " + imageIndex);
 			if(prevIndex == imageIndex)
 			{
 				imageIndex = (imageIndex % (images.length-1)) + 1;
-				
-				System.out.println("collision, new index: " + imageIndex);
 			}
 			
 			slotImage = slotImage.clone();

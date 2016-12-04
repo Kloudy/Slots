@@ -22,7 +22,7 @@ slot-machine:
       always-show-label: true
       onclick-sound: "UI_BUTTON_CLICK"
       position:
-        x: 0.8
+        x: 0.9
         y: 0.3
 
     slot-1:
@@ -33,8 +33,8 @@ slot-machine:
       width: 18
       height: 18
       position:
-        x: -0.4
-        y: 0.2
+        x: -0.5
+        y: 0.18
 
     slot-2:
       type: "image"
@@ -55,8 +55,8 @@ slot-machine:
       width: 18
       height: 18
       position:
-        x: 0.4
-        y: 0.2
+        x: 0.5
+        y: 0.18
 
     star-img:
       type: "image"
@@ -67,3 +67,71 @@ slot-machine:
       position:
         x: 0
         y: 0
+
+    ## Block Items ##
+    block-1:
+      type: "item"
+      item-id: "SEA_LANTERN"
+      rotation:
+        x: 0
+        y: 48
+        z: 0
+      position:
+        x: -0.12
+        y: -0.28
+
+    block-2:
+      type: "item"
+      item-id: "SEA_LANTERN"
+      rotation:
+        x: 0
+        y: 45
+        z: 0
+      position:
+        x: 0.12
+        y: -0.28
+
+    ## Sword Items ##
+    sword-1:
+      type: "item"
+      item-id: "DIAMOND_SWORD"
+      rotation:
+        x: -10
+        y: 0
+        z: 0
+      position:
+        x: -0.3
+        y: 0.11
+
+    sword-2:
+      type: "item"
+      item-id: "DIAMOND_SWORD"
+      rotation:
+        x: 169
+        y: 0
+        z: 0
+      position:
+        x: -0.086
+        y: 0.05
+
+    sword-3:
+      type: "item"
+      item-id: "DIAMOND_SWORD"
+      rotation:
+        x: -10
+        y: 0
+        z: 0
+      position:
+        x: 0.21
+        y: 0.11
+
+    sword-4:
+      type: "item"
+      item-id: "DIAMOND_SWORD"
+      rotation:
+        x: 171
+        y: 0
+        z: 0
+      position:
+        x: 0.422
+        y: 0.045

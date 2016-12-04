@@ -12,6 +12,7 @@ public class ConfigManager
 	public void loadConfigValues(Slots plugin)
 	{
 		plugin.saveDefaultConfig();
+		plugin.reloadConfig();
 		
 		FileConfiguration root = plugin.getConfig();
 		
