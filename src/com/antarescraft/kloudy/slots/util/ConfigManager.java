@@ -17,7 +17,7 @@ public class ConfigManager
 		
 		try
 		{
-			slotTickSound = Sound.valueOf(root.getString("slot-tick-sound"));
+			slotTickSound = Sound.valueOf(root.getString("slot-tick-sound", "BLOCK_NOTE_HARP"));
 		}catch(Exception e){}
 	}
 	

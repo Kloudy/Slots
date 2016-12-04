@@ -17,7 +17,9 @@ import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPage;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPageModel;
 import com.antarescraft.kloudy.slots.Slots;
 import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnable;
-import com.antarescraft.kloudy.slots.util.BukkitRunnableIntervalScheduler;
+import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableContext;
+import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableTask;
+import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableScheduler;
 import com.antarescraft.kloudy.slots.util.ThreadSequenceCompleteCallback;
 
 public class SlotsPageModel extends PlayerGUIPageModel
@@ -30,9 +32,9 @@ public class SlotsPageModel extends PlayerGUIPageModel
 	private ImageComponent slot2;
 	private ImageComponent slot3;
 	
-	private BukkitRunnableIntervalScheduler slot1Roller;
-	private BukkitRunnableIntervalScheduler slot2Roller;
-	private BukkitRunnableIntervalScheduler slot3Roller;
+	private BukkitIntervalRunnableScheduler slot1Roller;
+	private BukkitIntervalRunnableScheduler slot2Roller;
+	private BukkitIntervalRunnableScheduler slot3Roller;
 	private boolean isRolling = false;
 	
 	//intervals that the slot images change images
@@ -140,18 +142,17 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		playerGUIPage.removeComponent(slot2.getId());
 		playerGUIPage.removeComponent(slot3.getId());
 		
-		slot1Roller = new BukkitRunnableIntervalScheduler(plugin, new RollerThread(slot1), intervals);
+		slot1Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot1)), intervals);
 		
-		slot2Roller = new BukkitRunnableIntervalScheduler(plugin, new RollerThread(slot2), intervals);
+		slot2Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot2)), intervals);
 		
-		slot3Roller = new BukkitRunnableIntervalScheduler(plugin, new RollerThread(slot3), intervals, 
+		slot3Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot3)), intervals, 
 				new ThreadSequenceCompleteCallback()
 				{
 					@Override
-					public void call()
+					public void call(BukkitIntervalRunnableContext context)
 					{
-						//runs when the slot stops rolling
-						//player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 0.5f, 1);
+						
 					}
 				});
 		
@@ -170,10 +171,9 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		}.runTaskLater(plugin, rollTime() * 3);//isRolling is false after all the threads have finished rolling
 	}
 	
-	public class RollerThread extends BukkitIntervalRunnable
+	public class RollerThread implements BukkitIntervalRunnable
 	{
 		private ImageComponent slotImage;
-		private int prevSlotIndex = 0;
 		
 		public RollerThread(ImageComponent slotImage)
 		{
@@ -181,20 +181,32 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		}
 		
 		@Override
-		public void run()
+		public void run(BukkitIntervalRunnableContext context)
 		{
 			playerGUIPage.removeComponent(slotImage.getId());//remove the old image
 			
-			int imageIndex = new Random().nextInt(images.length-1) + 1;
-			if(prevSlotIndex == imageIndex)
+			System.out.println("context: " + context);
+			
+			int prevIndex = 0;
+			if(context.containsKey("prevIndex"))
 			{
-				imageIndex++;
-				imageIndex = imageIndex % (images.length - 1);
+				prevIndex = (int)context.getContextVariable("prevIndex");
+			}
+			
+			int imageIndex = new Random().nextInt(images.length-1) + 1;
+			System.out.println("prev: " + prevIndex);
+			System.out.println("current: " + imageIndex);
+			if(prevIndex == imageIndex)
+			{
+				imageIndex = (imageIndex % (images.length-1)) + 1;
+				
+				System.out.println("collision, new index: " + imageIndex);
 			}
 			
 			slotImage = slotImage.clone();
 			slotImage.setLines(imageLines.get(images[imageIndex]));
-			prevSlotIndex = imageIndex;
+			
+			context.setContextVariable("prevIndex", imageIndex);
 			
 			playerGUIPage.renderComponent(slotImage);//render new image
 			
