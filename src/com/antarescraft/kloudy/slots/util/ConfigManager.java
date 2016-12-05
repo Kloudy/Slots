@@ -8,6 +8,7 @@ import com.antarescraft.kloudy.slots.Slots;
 public class ConfigManager
 {
 	private Sound slotTickSound;
+	private double buyIn;
 	
 	public void loadConfigValues(Slots plugin)
 	{

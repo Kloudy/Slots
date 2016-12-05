@@ -5,8 +5,6 @@ buy-in: 5.00  #  How much money it costs to play the game for 1 roll
 ###  Jackpots - This configuration defines the payout for each jackpot  ###
 ###  A player wins a jackpot when three of the same image are displayed as the result of rolling the slot machine  ###
 
-jackpots:
-
   coin-jackpot:    # 1/5 (20%) chance of rolling this jackpot. This is the most common jackpot
     payout: 15.00  #  How much money the slot machine will pay out when the player wins this jackpot
 
