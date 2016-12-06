@@ -20,6 +20,8 @@ public class ConfigManager
 		try
 		{
 			slotTickSound = Sound.valueOf(root.getString("slot-tick-sound", "BLOCK_NOTE_HARP"));
+			buyIn = root.getDouble("buy-in");
+			
 		}catch(Exception e){}
 	}
 	
