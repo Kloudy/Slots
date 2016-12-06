@@ -25,19 +25,34 @@ public class ConfigParser
 				//Configuration property field
 				if(field.isAnnotationPresent(ConfigurationProperty.class))
 				{
-					
+					ConfigurationProperty annotation = field.getAnnotation(ConfigurationProperty.class);
+					if(annotation.key().equals(key))
+					{
+						if(field.getType().equals(String.class))
+						{
+							
+						}
+					}
 				}
 				
 				//Configuration element
 				else if(field.isAnnotationPresent(ConfigurationElement.class))
 				{
-					
+					ConfigurationElement annotation = field.getAnnotation(ConfigurationElement.class);
+					if(annotation.key().equals(key))
+					{
+						
+					}
 				}
 				
 				//Configuration element collection
 				else if(field.isAnnotationPresent(ConfigurationElementCollection.class))
 				{
-					
+					ConfigurationElementCollection annotation = field.getAnnotation(ConfigurationElementCollection.class);
+					if(annotation.key().equals(key))
+					{
+						
+					}
 				}
 			}
 		}
