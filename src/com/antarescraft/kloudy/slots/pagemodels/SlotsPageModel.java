@@ -121,7 +121,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			t += interval;
 		}
 		
-		t+= 10;//add 10 tick delay to the end
+		t+= 5;//add 10 tick delay to the end
 		
 		return t;
 	}
