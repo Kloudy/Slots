@@ -1,15 +1,15 @@
 package com.antarescraft.kloudy.slots;
 
+import com.antarescraft.kloudy.plugincore.config.annotations.ConfigurationElementKey;
+import com.antarescraft.kloudy.plugincore.config.annotations.DoubleConfigurationProperty;
+
 public class Jackpot
 {
+	@ConfigurationElementKey
 	private String name;
-	private double payout;
 	
-	public Jackpot(String name, double payout)
-	{
-		this.name = name;
-		this.payout = payout;
-	}
+	@DoubleConfigurationProperty(key = "payout", defaultValue = 15)
+	private double payout;
 	
 	public String getName()
 	{

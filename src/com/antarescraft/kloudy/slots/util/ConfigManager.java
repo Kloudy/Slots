@@ -29,4 +29,9 @@ public class ConfigManager
 	{
 		return slotTickSound;
 	}
+	
+	public double getBuyIn()
+	{
+		return buyIn;
+	}
 }

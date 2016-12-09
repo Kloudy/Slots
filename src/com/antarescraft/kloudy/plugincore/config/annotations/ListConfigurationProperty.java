@@ -7,9 +7,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ConfigurationElementCollection
+public @interface ListConfigurationProperty 
 {
 	public String key();
-	public String elementClasspath();
-	public boolean isRequired();
+	public boolean isRequired() default true;
 }

@@ -7,9 +7,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ConfigurationElementCollection
+public @interface StringConfigurationProperty 
 {
 	public String key();
-	public String elementClasspath();
-	public boolean isRequired();
+	public String defaultValue() default "";
+	public boolean isRequired() default true;
 }

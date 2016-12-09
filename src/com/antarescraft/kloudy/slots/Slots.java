@@ -1,23 +1,25 @@
 package com.antarescraft.kloudy.slots;
 
 import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
+import com.antarescraft.kloudy.plugincore.config.ConfigParser;
 import com.antarescraft.kloudy.slots.events.CommandEvent;
-import com.antarescraft.kloudy.slots.util.ConfigManager;
 
 public class Slots extends HoloGUIPlugin
-{
-	private ConfigManager configManager;
-	
+{	
 	@Override
 	public void onEnable()
 	{
+		saveDefaultConfig();
+		
+		setMinSupportedApiVersion("1.0.2");
+		checkMinApiVersion();
+		
+		getSlotsConfig();
+		
 		getCommand("slots").setExecutor(new CommandEvent(this));
 		
 		//copyResourceConfigs(true);
 		loadGUIPages();
-		
-		configManager = new ConfigManager();
-		configManager.loadConfigValues(this);
 	}
 	
 	@Override
@@ -26,8 +28,24 @@ public class Slots extends HoloGUIPlugin
 		getHoloGUIApi().destroyGUIPages(this);
 	}
 	
-	public ConfigManager getConfigManager()
+	
+	public SlotsConfiguration getSlotsConfig()
 	{
-		return configManager;
+		reloadConfig();
+		
+		SlotsConfiguration config = null;
+		
+		try 
+		{
+			config = ConfigParser.parse(getConfig().getRoot(), SlotsConfiguration.class);
+			
+			System.out.println(config.toString());
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+
+		return config;
 	}
 }

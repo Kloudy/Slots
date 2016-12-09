@@ -7,9 +7,11 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ConfigurationElementCollection
+public @interface IntegerConfigurationProperty
 {
 	public String key();
-	public String elementClasspath();
-	public boolean isRequired();
+	public int defaultValue() default 0;
+	public int minValue() default Integer.MIN_VALUE;
+	public int maxValue() default Integer.MAX_VALUE;
+	public boolean isRequired() default true;
 }

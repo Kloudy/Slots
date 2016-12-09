@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ConfigurationProperty
+public @interface DoubleConfigurationProperty
 {
 	public String key();
-	public String defaultValue() default "";
-	public int minValue() default Integer.MIN_VALUE;
-	public int maxValue() default Integer.MAX_VALUE;
-	public boolean isRequired() default false;
+	public double defaultValue() default 0;
+	public double minValue() default Double.MIN_VALUE;
+	public double maxValue() default Double.MAX_VALUE;
+	public boolean isRequired() default true;
 }
