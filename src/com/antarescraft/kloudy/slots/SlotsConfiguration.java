@@ -14,7 +14,7 @@ public class SlotsConfiguration
 	@DoubleConfigurationProperty(key = "buy-in", defaultValue = 5)
 	private double buyIn;
 	
-	@ConfigurationElementMap(key = "jackpots", elementClasspath = "com.antarescraft.kloudy.slots.Jackpot")
+	@ConfigurationElementMap(key = "jackpots")
 	private HashMap<String, Jackpot> jackpots;
 	
 	public String toString()

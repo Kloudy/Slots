@@ -10,6 +10,5 @@ import java.lang.annotation.Target;
 public @interface ConfigurationElementMap
 {
 	public String key();
-	public String elementClasspath();
 	public boolean isRequired() default true;
 }
