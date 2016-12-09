@@ -17,6 +17,21 @@ public class SlotsConfiguration
 	@ConfigurationElementMap(key = "jackpots")
 	private HashMap<String, Jackpot> jackpots;
 	
+	public String getSlotTickSound()
+	{
+		return slotTickSound;
+	}
+	
+	public double getBuyIn()
+	{
+		return buyIn;
+	}
+	
+	public HashMap<String, Jackpot> getJackpots()
+	{
+		return jackpots;
+	}
+	
 	public String toString()
 	{
 		StringBuilder strBuilder = new StringBuilder();

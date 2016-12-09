@@ -38,8 +38,6 @@ public class Slots extends HoloGUIPlugin
 		try 
 		{
 			config = ConfigParser.parse(getConfig().getRoot(), SlotsConfiguration.class);
-			
-			System.out.println(config.toString());
 		} 
 		catch (Exception e) 
 		{
