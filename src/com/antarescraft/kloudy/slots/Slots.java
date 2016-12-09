@@ -5,7 +5,9 @@ import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigParser;
 import com.antarescraft.kloudy.slots.events.CommandEvent;
 
 public class Slots extends HoloGUIPlugin
-{	
+{
+	private SlotsConfiguration slotsConfig;
+	
 	@Override
 	public void onEnable()
 	{
@@ -14,7 +16,7 @@ public class Slots extends HoloGUIPlugin
 		setMinSupportedApiVersion("1.0.2");
 		checkMinApiVersion();
 		
-		getSlotsConfig();
+		reloadSlotsConfig();
 		
 		getCommand("slots").setExecutor(new CommandEvent(this));
 		
@@ -28,22 +30,22 @@ public class Slots extends HoloGUIPlugin
 		getHoloGUIApi().destroyGUIPages(this);
 	}
 	
-	
-	public SlotsConfiguration getSlotsConfig()
+	public void reloadSlotsConfig()
 	{
 		reloadConfig();
-		
-		SlotsConfiguration config = null;
-		
+
 		try 
 		{
-			config = ConfigParser.parse(getConfig().getRoot(), SlotsConfiguration.class);
+			slotsConfig = ConfigParser.parse(getConfig().getRoot(), SlotsConfiguration.class);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
-
-		return config;
+	}
+	
+	public SlotsConfiguration getSlotsConfig()
+	{
+		return slotsConfig;
 	}
 }

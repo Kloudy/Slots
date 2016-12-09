@@ -3,6 +3,7 @@ package com.antarescraft.kloudy.slots.pagemodels;
 import java.util.HashMap;
 import java.util.Random;
 
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -203,11 +204,11 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			
 			playerGUIPage.renderComponent(slotImage);//render new image
 			
-			//Sound slotTickSound = ((Slots)plugin).getConfigManager().getSlotTickSound();
-			//if(slotTickSound != null)
-			//{
-			//	player.playSound(player.getLocation(), slotTickSound, 0.5f, 1);
-			//}
+			Sound slotTickSound = Sound.valueOf(((Slots)plugin).getSlotsConfig().getSlotTickSound());
+			if(slotTickSound != null)
+			{
+				player.playSound(player.getLocation(), slotTickSound, 0.5f, 1);
+			}
 		}
 		
 		@Override
