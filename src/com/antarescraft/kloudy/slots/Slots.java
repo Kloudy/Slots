@@ -1,7 +1,7 @@
 package com.antarescraft.kloudy.slots;
 
 import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
-import com.antarescraft.kloudy.plugincore.config.ConfigParser;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigParser;
 import com.antarescraft.kloudy.slots.events.CommandEvent;
 
 public class Slots extends HoloGUIPlugin

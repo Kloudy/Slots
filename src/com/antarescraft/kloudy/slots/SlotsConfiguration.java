@@ -2,9 +2,9 @@ package com.antarescraft.kloudy.slots;
 
 import java.util.HashMap;
 
-import com.antarescraft.kloudy.plugincore.config.annotations.ConfigurationElementMap;
-import com.antarescraft.kloudy.plugincore.config.annotations.DoubleConfigurationProperty;
-import com.antarescraft.kloudy.plugincore.config.annotations.StringConfigurationProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.ConfigurationElementMap;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.DoubleConfigurationProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.StringConfigurationProperty;
 
 public class SlotsConfiguration
 {
@@ -27,11 +27,12 @@ public class SlotsConfiguration
 		
 		if(jackpots != null)
 		{
+			strBuilder.append("[");
 			for(Jackpot jackpot : jackpots.values())
 			{
-				strBuilder.append("	" + jackpot.getName() + ": ")
-							.append("   " + jackpot.getPayout());
+				strBuilder.append(jackpot.toString() + ",");
 			}
+			strBuilder.append("]");
 		}
 		
 		strBuilder.append("}");
