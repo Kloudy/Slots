@@ -1,15 +1,15 @@
 package com.antarescraft.kloudy.slots;
 
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.ConfigurationElementKey;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.DoubleConfigurationProperty;
+
 public class Jackpot
 {
+	@ConfigurationElementKey
 	private String name;
-	private double payout;
 	
-	public Jackpot(String name, double payout)
-	{
-		this.name = name;
-		this.payout = payout;
-	}
+	@DoubleConfigurationProperty(key = "payout")
+	private double payout;
 	
 	public String getName()
 	{
@@ -19,5 +19,10 @@ public class Jackpot
 	public double getPayout()
 	{
 		return payout;
+	}
+	
+	public String toString()
+	{
+		return String.format("{ name: %s, payout: %s }", name, Double.toString(payout));
 	}
 }

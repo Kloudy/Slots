@@ -31,7 +31,7 @@ public class CommandEvent implements CommandExecutor
 	public void reload(CommandSender sender, String[] args)
 	{
 		plugin.getHoloGUIApi().destroyGUIPages(plugin);
-		plugin.getConfigManager().loadConfigValues(plugin);
+		plugin.reloadSlotsConfig();
 		plugin.loadGUIPages();
 		
 		MessageManager.info(sender, "Reloaded the config");

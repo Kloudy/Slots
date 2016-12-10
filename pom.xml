@@ -65,8 +65,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <finalName>Slots</finalName>
-                            <outputDirectory>D:\Tim\Spigot 1.11 Server\plugins</outputDirectory>
+                            <outputFile>${plugin-folder}/Slots.jar</outputFile>
                         </configuration>
                     </execution>
                 </executions>
