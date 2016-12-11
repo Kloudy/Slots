@@ -2,11 +2,11 @@ package com.antarescraft.kloudy.slots;
 
 import java.util.HashMap;
 
-import com.antarescraft.kloudy.plugincore.config.ConfigElementMap;
-import com.antarescraft.kloudy.plugincore.config.ConfigProperty;
-import com.antarescraft.kloudy.plugincore.config.DoubleConfigProperty;
-import com.antarescraft.kloudy.plugincore.config.OptionalConfigProperty;
-import com.antarescraft.kloudy.plugincore.config.StringConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigElementMap;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.DoubleConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.OptionalConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.StringConfigProperty;
 
 public class SlotsConfiguration
 {
