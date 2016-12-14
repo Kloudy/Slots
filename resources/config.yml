@@ -19,7 +19,7 @@ jackpots:
   tnt-jackpot:     # 1/20 (5%) chance of rolling this jackpot
     payout: 50.00
 
-  star-jackpot:    # 1/50 (2%) chance of rolling this jackpot
+  cherry-jackpot:    # 1/50 (2%) chance of rolling this jackpot
     payout: 125.00
 
   trophy-jackpot:  # 1/100 (1%) chance of rolling this jackpot

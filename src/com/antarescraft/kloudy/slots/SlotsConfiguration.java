@@ -2,19 +2,25 @@ package com.antarescraft.kloudy.slots;
 
 import java.util.HashMap;
 
-import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.ConfigurationElementMap;
-import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.DoubleConfigurationProperty;
-import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.StringConfigurationProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigElementMap;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.DoubleConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.OptionalConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.StringConfigProperty;
 
 public class SlotsConfiguration
 {
-	@StringConfigurationProperty(key = "slot-tick-sound", defaultValue = "BLOCK_NOTE_HARP")
+	@OptionalConfigProperty
+	@StringConfigProperty(defaultValue = "BLOCK_NOTE_HARP")
+	@ConfigProperty(key = "slot-tick-sound", note = "The sound that plays while the slot machine is rolling.")
 	private String slotTickSound;
-	
-	@DoubleConfigurationProperty(key = "buy-in", defaultValue = 5)
+
+	@DoubleConfigProperty(defaultValue = 5.00, maxValue = Double.POSITIVE_INFINITY, minValue = 0)
+	@ConfigProperty(key = "buy-in", note = "How much money it costs to play the game per roll")
 	private double buyIn;
 	
-	@ConfigurationElementMap(key = "jackpots")
+	@ConfigElementMap
+	@ConfigProperty(key = "jackpots", note = "List of possible jackpots")
 	private HashMap<String, Jackpot> jackpots;
 	
 	public String getSlotTickSound()
