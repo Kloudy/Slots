@@ -27,7 +27,7 @@
             <groupId>com.antarescraft.kloudy.hologuiapi</groupId>
             <artifactId>HoloGUIApi</artifactId>
             <scope>provided</scope>
-            <version>1.0.3</version>
+            <version>1.0.5</version>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
