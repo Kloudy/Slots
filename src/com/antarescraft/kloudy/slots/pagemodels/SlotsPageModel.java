@@ -7,6 +7,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ButtonComponent;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIPage;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ImageComponent;
@@ -16,6 +17,7 @@ import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageLoadHandler;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPage;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPageModel;
 import com.antarescraft.kloudy.slots.Slots;
+import com.antarescraft.kloudy.slots.SlotsConfiguration;
 import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnable;
 import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableContext;
 import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableTask;
@@ -38,14 +40,14 @@ public class SlotsPageModel extends PlayerGUIPageModel
 	private boolean isRolling = false;
 	
 	//intervals that the slot images change images
-	private static final int[] intervals = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 7, 7 };
+	private static final int[] intervals = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 7 };
 	
 	//array of images that could fill the slot as the result of a roll
 	private static final String[] images = new String[] { "question-block.gif", "coin.gif", "star.gif", "ring.gif", "tnt.gif", "trophy.gif" };
 	
 	private static HashMap<String, String[][]> imageLines;
 	
-	public SlotsPageModel(final Slots plugin, GUIPage guiPage, final Player player)
+	public SlotsPageModel(final HoloGUIPlugin plugin, GUIPage guiPage, final Player player)
 	{
 		super(plugin, guiPage, player);
 		
@@ -204,7 +206,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			
 			playerGUIPage.renderComponent(slotImage);//render new image
 			
-			Sound slotTickSound = Sound.valueOf(((Slots)plugin).getSlotsConfig().getSlotTickSound());
+			Sound slotTickSound = Sound.valueOf(SlotsConfiguration.getSlotsConfiguration((Slots)plugin).getSlotTickSound());
 			if(slotTickSound != null)
 			{
 				player.playSound(player.getLocation(), slotTickSound, 0.5f, 1);

@@ -8,7 +8,7 @@ buy-in: 5.00  #  How much money it costs to play the game for 1 roll
 jackpots:
 
   coin-jackpot:    # 1/5 (20%) chance of rolling this jackpot. This is the most common jackpot
-    payout: 15.00  #  How much money the slot machine will pay out when the player wins this jackpot
+    payout: 15.00  # How much money the slot machine will pay out when the player wins this jackpot
 
   ring-jackpot:    # 1/8 (12.5%) chance of rolling this jackpot
     payout: 20.00
@@ -19,7 +19,7 @@ jackpots:
   tnt-jackpot:     # 1/20 (5%) chance of rolling this jackpot
     payout: 50.00
 
-  cherry-jackpot:    # 1/50 (2%) chance of rolling this jackpot
+  cherry-jackpot:  # 1/50 (2%) chance of rolling this jackpot
     payout: 125.00
 
   trophy-jackpot:  # 1/100 (1%) chance of rolling this jackpot
@@ -27,7 +27,3 @@ jackpots:
 
   diamond-jackpot: # 1/1000 (0.1%) chance of rolling this jackpot. This is the most rare jackpot to be rolled
     payout: 2500.00
-
-
-
-
