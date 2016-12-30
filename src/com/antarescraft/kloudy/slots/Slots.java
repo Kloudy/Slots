@@ -11,9 +11,7 @@ public class Slots extends HoloGUIPlugin
 	public void onEnable()
 	{
 		pluginName = getName();
-		
-		saveDefaultConfig();
-		
+				
 		setMinSupportedApiVersion("1.0.6");
 		checkMinApiVersion();
 		
@@ -22,7 +20,6 @@ public class Slots extends HoloGUIPlugin
 		getCommand("slots").setExecutor(new CommandEvent(this));
 		
 		//copyResourceConfigs(true);
-		loadGUIPages();
 	}
 	
 	@Override

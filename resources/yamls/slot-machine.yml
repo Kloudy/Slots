@@ -17,8 +17,8 @@ slot-machine:
       type: "button"
       mini: true
       symmetrical: true
-      icon: "confirm.png"
-      label: "&6&lRoll"
+      icon: "dice.png"
+      label: "&6&lROLL"
       always-show-label: true
       onclick-sound: "UI_BUTTON_CLICK"
       position:
