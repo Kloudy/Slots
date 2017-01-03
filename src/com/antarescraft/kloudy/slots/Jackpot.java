@@ -7,15 +7,15 @@ import com.antarescraft.kloudy.hologuiapi.plugincore.config.DoubleConfigProperty
 public class Jackpot
 {
 	@ConfigElementKey
-	private String name;
+	private String jackpotType;
 	
 	@DoubleConfigProperty(defaultValue = 0, maxValue = Double.POSITIVE_INFINITY, minValue = 0)
 	@ConfigProperty(key = "payout")
 	private double payout;
 	
-	public String getName()
+	public SlotElement getType()
 	{
-		return name;
+		return SlotElement.getJackpotTypeByTypeId(jackpotType);
 	}
 	
 	public double getPayout()
@@ -25,6 +25,6 @@ public class Jackpot
 	
 	public String toString()
 	{
-		return String.format("{ name: %s, payout: %s }", name, Double.toString(payout));
+		return String.format("{ name: %s, payout: %s }", jackpotType, Double.toString(payout));
 	}
 }

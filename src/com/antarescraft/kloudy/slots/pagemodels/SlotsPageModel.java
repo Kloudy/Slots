@@ -16,6 +16,7 @@ import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageCloseHandler;
 import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageLoadHandler;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPage;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPageModel;
+import com.antarescraft.kloudy.slots.SlotElement;
 import com.antarescraft.kloudy.slots.Slots;
 import com.antarescraft.kloudy.slots.SlotsConfiguration;
 import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnable;
@@ -42,8 +43,9 @@ public class SlotsPageModel extends PlayerGUIPageModel
 	//intervals that the slot images change images
 	private static final int[] intervals = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 7 };
 	
-	//array of images that could fill the slot as the result of a roll
-	private static final String[] images = new String[] { "question-block.gif", "coin.gif", "star.gif", "ring.gif", "tnt.gif", "trophy.gif" };
+	private static SlotElement[] slot1Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.COIN, SlotElement.TNT, SlotElement.COIN, SlotElement.TROPHY};
+	private static SlotElement[] slot2Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.COIN, SlotElement.TNT, SlotElement.COIN, SlotElement.TROPHY};
+	private static SlotElement[] slot3Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.COIN, SlotElement.TNT, SlotElement.COIN, SlotElement.TROPHY};
 	
 	private static HashMap<String, String[][]> imageLines;
 	
@@ -55,9 +57,9 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		{
 			imageLines = new HashMap<String, String[][]>();
 			
-			for(String image : images)
+			for(SlotElement slotElement : SlotElement.values())
 			{
-				imageLines.put(image, plugin.loadImage(image, 18, 18, true));
+				imageLines.put(slotElement.getImageName(), plugin.loadImage(slotElement.getImageName(), 18, 18, true));
 			}
 		}
 		
@@ -144,11 +146,11 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		playerGUIPage.removeComponent(slot2.getId());
 		playerGUIPage.removeComponent(slot3.getId());
 		
-		slot1Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot1)), intervals);
+		slot1Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot1, slot1Elements, new Random().nextInt(slot1Elements.length))), intervals);
 		
-		slot2Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot2)), intervals);
+		slot2Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot2, slot2Elements, new Random().nextInt(slot2Elements.length))), intervals);
 		
-		slot3Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot3)), intervals, 
+		slot3Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot3, slot3Elements, new Random().nextInt(slot3Elements.length))), intervals, 
 				new ThreadSequenceCompleteCallback()
 				{
 					@Override
@@ -176,33 +178,27 @@ public class SlotsPageModel extends PlayerGUIPageModel
 	public class RollerThread implements BukkitIntervalRunnable
 	{
 		private ImageComponent slotImage;
+		private SlotElement[] slotElements;
+		private int index;
 		
-		public RollerThread(ImageComponent slotImage)
+		public RollerThread(ImageComponent slotImage, SlotElement[] slotElements, int index)
 		{
 			this.slotImage = slotImage;
+			this.slotElements = slotElements;
+			this.index = index;
 		}
 		
 		@Override
 		public void run(BukkitIntervalRunnableContext context)
 		{
 			playerGUIPage.removeComponent(slotImage.getId());//remove the old image
-						
-			int prevIndex = 0;
-			if(context.containsKey("prevIndex"))
-			{
-				prevIndex = (int)context.getContextVariable("prevIndex");
-			}
-			
-			int imageIndex = new Random().nextInt(images.length-1) + 1;
-			if(prevIndex == imageIndex)
-			{
-				imageIndex = (imageIndex % (images.length-1)) + 1;
-			}
 			
 			slotImage = slotImage.clone();
-			slotImage.setLines(imageLines.get(images[imageIndex]));
+			slotImage.setLines(imageLines.get(slotElements[index]));
 			
-			context.setContextVariable("prevIndex", imageIndex);
+			index = (index + 1) % slotElements.length;
+			
+			context.setContextVariable("index", index);
 			
 			playerGUIPage.renderComponent(slotImage);//render new image
 			
