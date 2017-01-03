@@ -12,12 +12,6 @@ commands:
 
 permissions:
 
-  slots.admin:
-    description: Allows a player to use Slots admin commands
-    default: op
-    children:
-      unitygen.display: true
-
   slots.play:
     description: Allows a player to play Slots
     default: true

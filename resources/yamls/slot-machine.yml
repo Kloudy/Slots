@@ -2,16 +2,14 @@ slot-machine:
 
   components:
 
-    close-btn:
-      type: "button"
-      label: "Close Menu"
-      symmetrical: true
-      mini: true
-      icon: "x-red.gif"
-      onclick-sound: "UI_BUTTON_CLICK"
+    buy-in:
+      type: "label"
+      label-disance: 6
+      text:
+        - "&a&lBuy In: $model.buyIn();"
       position:
-        x: 1
-        y: 1.2
+        x: 0
+        y: -0.2
 
     roll-btn:
       type: "button"
@@ -23,6 +21,17 @@ slot-machine:
       onclick-sound: "UI_BUTTON_CLICK"
       position:
         x: 0
+        y: -0.3
+
+    close-btn:
+      type: "button"
+      label: "Exit"
+      symmetrical: true
+      mini: true
+      icon: "x-red.gif"
+      onclick-sound: "UI_BUTTON_CLICK"
+      position:
+        x: 0.8
         y: -0.3
 
     slot-machine:
