@@ -58,9 +58,9 @@ public class SlotsConfiguration
 		return buyIn;
 	}
 	
-	public HashMap<String, Jackpot> getJackpots()
+	public Jackpot getJackpot(String jackpotTypeId)
 	{
-		return jackpots;
+		return jackpots.get(jackpotTypeId);
 	}
 	
 	public String toString()

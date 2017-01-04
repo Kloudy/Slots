@@ -5,17 +5,18 @@ import java.util.Random;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ButtonComponent;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIPage;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ImageComponent;
+import com.antarescraft.kloudy.hologuiapi.guicomponents.LabelComponent;
 import com.antarescraft.kloudy.hologuiapi.handlers.ClickHandler;
 import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageCloseHandler;
 import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageLoadHandler;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPage;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPageModel;
+import com.antarescraft.kloudy.hologuiapi.plugincore.messaging.MessageManager;
 import com.antarescraft.kloudy.slots.SlotElement;
 import com.antarescraft.kloudy.slots.Slots;
 import com.antarescraft.kloudy.slots.SlotsConfiguration;
@@ -25,10 +26,15 @@ import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableTask;
 import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableScheduler;
 import com.antarescraft.kloudy.slots.util.ThreadSequenceCompleteCallback;
 
+import net.milkbowl.vault.economy.Economy;
+
 public class SlotsPageModel extends PlayerGUIPageModel
 {
 	private PlayerGUIPage playerGUIPage;
 	
+	private SlotsConfiguration config;
+	
+	private LabelComponent buyInLabel;
 	private ButtonComponent closeButton;
 	private ButtonComponent rollButton;
 	private ImageComponent slot1;
@@ -40,7 +46,10 @@ public class SlotsPageModel extends PlayerGUIPageModel
 	private BukkitIntervalRunnableScheduler slot3Roller;
 	private boolean isRolling = false;
 	
-	//intervals that the slot images change images
+	//array of selected slot elements after the slot finishes rolling
+	SlotElement[] slotResultElements = new SlotElement[3];
+	
+	//tick intervals that the slot elements change while rolling
 	private static final int[] intervals = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 7 };
 	
 	private static SlotElement[] slot1Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.COIN, SlotElement.TNT, SlotElement.COIN, SlotElement.TROPHY};
@@ -49,9 +58,15 @@ public class SlotsPageModel extends PlayerGUIPageModel
 	
 	private static HashMap<String, String[][]> imageLines;
 	
+	private Economy economy;
+	
 	public SlotsPageModel(final HoloGUIPlugin plugin, GUIPage guiPage, final Player player)
 	{
 		super(plugin, guiPage, player);
+				
+		config = SlotsConfiguration.getSlotsConfiguration((Slots)plugin);
+		
+		economy = ((Slots)plugin).getEconomy();
 		
 		if(imageLines == null)//load the slot images if we haven't already done so
 		{
@@ -63,11 +78,14 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			}
 		}
 		
+		buyInLabel = (LabelComponent)guiPage.getComponent("buy-in").clone();
 		closeButton = (ButtonComponent)guiPage.getComponent("close-btn");
 		rollButton = (ButtonComponent)guiPage.getComponent("roll-btn");
 		slot1 = (ImageComponent)guiPage.getComponent("slot-1").clone();
 		slot2 = (ImageComponent)guiPage.getComponent("slot-2").clone();
 		slot3 = (ImageComponent)guiPage.getComponent("slot-3").clone();
+		
+		buyInLabel.setLines(new String[]{ "&6&lBUY IN: &a&l" + config.getBuyIn() + " " + economy.currencyNamePlural() });
 		
 		closeButton.registerClickHandler(player, new ClickHandler()
 		{
@@ -94,6 +112,9 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			{
 				playerGUIPage = _playerGUIPage;
 				
+				//render buy-in label
+				playerGUIPage.renderComponent(buyInLabel);
+				
 				//render the slot images
 				playerGUIPage.renderComponent(slot1);
 				playerGUIPage.renderComponent(slot2);
@@ -114,6 +135,14 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		});
 	}
 	
+	//Function used for debugging purposes to generate a roll that will result in a jackpot of the specified type
+	/*private void createJackpot(SlotElement element)
+	{
+		slot1Elements = new SlotElement[]{element};
+		slot2Elements = new SlotElement[]{element};
+		slot3Elements = new SlotElement[]{element};
+	}*/
+	
 	/**
 	 * Returns the total amount of time it takes to complete one slot roll
 	 */
@@ -130,9 +159,28 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		return t;
 	}
 	
-	private void isRolling(boolean isRolling)
+	/*
+	 * Sets the result of the slot roll
+	 */
+	private void setResult(int slotIndex, SlotElement element)
 	{
-		this.isRolling = isRolling;
+		slotResultElements[slotIndex] = element;
+	}
+	
+	/*
+	 * Checks to see if the player won a jackpot and if so awards the player the payout
+	 */
+	private void checkJackpot()
+	{
+		//all three slots have the same element, jackpot!
+		if(slotResultElements[0] == slotResultElements[1] && slotResultElements[0] == slotResultElements[2])
+		{
+			//deposit the jackpot payout amount into the player's account
+			double payout = config.getJackpot(slotResultElements[0].getTypeId()).getPayout();
+			economy.depositPlayer(player, payout);
+			
+			MessageManager.success(player, "Jackpot! You won " + payout  + economy.currencyNamePlural() + "!");
+		}
 	}
 	
 	/*
@@ -142,13 +190,35 @@ public class SlotsPageModel extends PlayerGUIPageModel
 	{
 		if(isRolling) return;//already rolling
 		
+		economy.withdrawPlayer(player, config.getBuyIn());//withdraw the buy-in amount from the player's account
+		
 		playerGUIPage.removeComponent(slot1.getId());
 		playerGUIPage.removeComponent(slot2.getId());
 		playerGUIPage.removeComponent(slot3.getId());
 		
-		slot1Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot1, slot1Elements, new Random().nextInt(slot1Elements.length))), intervals);
+		slot1Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot1, slot1Elements, new Random().nextInt(slot1Elements.length))), intervals,
+				new ThreadSequenceCompleteCallback()
+				{
+					@Override
+					public void call(BukkitIntervalRunnableContext context)
+					{
+						SlotElement element = (SlotElement)context.getContextVariable("selection");
+						setResult(0, element);
+					}
+				}
+		);
 		
-		slot2Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot2, slot2Elements, new Random().nextInt(slot2Elements.length))), intervals);
+		slot2Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot2, slot2Elements, new Random().nextInt(slot2Elements.length))), intervals, 
+				new ThreadSequenceCompleteCallback()
+				{
+					@Override
+					public void call(BukkitIntervalRunnableContext context)
+					{
+						SlotElement element = (SlotElement)context.getContextVariable("selection");
+						setResult(1, element);
+					}
+				}
+		);
 		
 		slot3Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot3, slot3Elements, new Random().nextInt(slot3Elements.length))), intervals, 
 				new ThreadSequenceCompleteCallback()
@@ -156,7 +226,12 @@ public class SlotsPageModel extends PlayerGUIPageModel
 					@Override
 					public void call(BukkitIntervalRunnableContext context)
 					{
+						SlotElement element = (SlotElement)context.getContextVariable("selection");
+						setResult(2, element);
 						
+						checkJackpot();
+						
+						isRolling = false;
 					}
 				});
 		
@@ -165,7 +240,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		slot2Roller.run(rollTime());
 		slot3Roller.run(rollTime() * 2);
 		
-		new BukkitRunnable()
+		/*new BukkitRunnable()
 		{
 			@Override
 			public void run()
@@ -173,6 +248,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 				isRolling(false);
 			}
 		}.runTaskLater(plugin, rollTime() * 3);//isRolling is false after all the threads have finished rolling
+		 */
 	}
 	
 	public class RollerThread implements BukkitIntervalRunnable
@@ -192,15 +268,19 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		public void run(BukkitIntervalRunnableContext context)
 		{
 			playerGUIPage.removeComponent(slotImage.getId());//remove the old image
+
+			if(context.containsKey("index"))
+			{
+				index = (int) context.getContextVariable("index");
+			}
+			
+			context.setContextVariable("selection", slotElements[index]);
 			
 			slotImage = slotImage.clone();
-			slotImage.setLines(imageLines.get(slotElements[index]));
-			
-			index = (index + 1) % slotElements.length;
-			
-			context.setContextVariable("index", index);
-			
+			slotImage.setLines(imageLines.get(slotElements[index].getImageName()));
 			playerGUIPage.renderComponent(slotImage);//render new image
+
+			index = (index + 1) % slotElements.length;
 			
 			Sound slotTickSound = Sound.valueOf(SlotsConfiguration.getSlotsConfiguration((Slots)plugin).getSlotTickSound());
 			if(slotTickSound != null)
@@ -212,7 +292,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		@Override
 		public RollerThread clone()
 		{
-			return new RollerThread(slotImage);
+			return new RollerThread(slotImage, slotElements, index);
 		}
 	}
 }

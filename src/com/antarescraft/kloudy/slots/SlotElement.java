@@ -20,12 +20,17 @@ public enum SlotElement
 		this.imageName = imageName;
 	}
 	
+	public String getTypeId()
+	{
+		return typeId;
+	}
+	
 	public String getImageName()
 	{
 		return imageName;
 	}
 	
-	public static SlotElement getJackpotTypeByTypeId(String typeId)
+	/*public static SlotElement getJackpotTypeByTypeId(String typeId)
 	{
 		for(SlotElement type : SlotElement.values())
 		{
@@ -36,5 +41,5 @@ public enum SlotElement
 		}
 		
 		return null;
-	}
+	}*/
 }
