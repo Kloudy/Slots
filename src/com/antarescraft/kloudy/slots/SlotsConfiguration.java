@@ -8,6 +8,7 @@ import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigProperty;
 import com.antarescraft.kloudy.hologuiapi.plugincore.config.DoubleConfigProperty;
 import com.antarescraft.kloudy.hologuiapi.plugincore.config.OptionalConfigProperty;
 import com.antarescraft.kloudy.hologuiapi.plugincore.config.StringConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.messaging.MessageManager;
 
 public class SlotsConfiguration
 {
@@ -44,6 +45,9 @@ public class SlotsConfiguration
 	@ConfigProperty(key = "buy-in")
 	private double buyIn;
 	
+	@ConfigProperty(key = "not-enough-money")
+	private String notEnoughMoneyMessage;
+	
 	@ConfigElementMap
 	@ConfigProperty(key = "jackpots")
 	private HashMap<String, Jackpot> jackpots;
@@ -56,6 +60,11 @@ public class SlotsConfiguration
 	public double getBuyIn()
 	{
 		return buyIn;
+	}
+	
+	public String getNotEnoughMoneyMessage()
+	{
+		return MessageManager.setFormattingCodes(notEnoughMoneyMessage);
 	}
 	
 	public Jackpot getJackpot(String jackpotTypeId)

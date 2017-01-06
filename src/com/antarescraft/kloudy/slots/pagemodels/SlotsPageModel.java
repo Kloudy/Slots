@@ -190,7 +190,16 @@ public class SlotsPageModel extends PlayerGUIPageModel
 	{
 		if(isRolling) return;//already rolling
 		
-		economy.withdrawPlayer(player, config.getBuyIn());//withdraw the buy-in amount from the player's account
+		if(economy.getBalance(player) >= config.getBuyIn())
+		{
+			economy.withdrawPlayer(player, config.getBuyIn());//withdraw the buy-in amount from the player's account
+		}
+		else
+		{
+			player.sendMessage(config.getNotEnoughMoneyMessage());
+			
+			return;
+		}
 		
 		playerGUIPage.removeComponent(slot1.getId());
 		playerGUIPage.removeComponent(slot2.getId());
@@ -239,16 +248,6 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		slot1Roller.run(0);
 		slot2Roller.run(rollTime());
 		slot3Roller.run(rollTime() * 2);
-		
-		/*new BukkitRunnable()
-		{
-			@Override
-			public void run()
-			{
-				isRolling(false);
-			}
-		}.runTaskLater(plugin, rollTime() * 3);//isRolling is false after all the threads have finished rolling
-		 */
 	}
 	
 	public class RollerThread implements BukkitIntervalRunnable

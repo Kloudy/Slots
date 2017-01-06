@@ -2,6 +2,12 @@ slot-tick-sound: "BLOCK_NOTE_HARP"  #Sound the plays when the player rolls the s
 
 buy-in: 5.00  #  How much money it costs to play the game for 1 roll
 
+### Messaging ###
+
+not-enough-money: "&c&lSorry! You don't have enough money to play!"  # Message displayed to the player when they have less than the buy-in amount in their account
+
+#################
+
 ###  Jackpots - This configuration defines the payout for each jackpot  ###
 ###  A player wins a jackpot when three of the same image are displayed as the result of rolling the slot machine  ###
 
