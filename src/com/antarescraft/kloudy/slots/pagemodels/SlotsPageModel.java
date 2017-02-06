@@ -1,5 +1,7 @@
 package com.antarescraft.kloudy.slots.pagemodels;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -85,7 +87,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		slot2 = (ImageComponent)guiPage.getComponent("slot-2").clone();
 		slot3 = (ImageComponent)guiPage.getComponent("slot-3").clone();
 		
-		buyInLabel.setLines(new String[]{ "&6&lBUY IN: &a&l" + config.getBuyIn() + " " + economy.currencyNamePlural() });
+		buyInLabel.getProperties().setLines((ArrayList<String>) Arrays.asList(new String[]{ "&6&lBUY IN: &a&l" + config.getBuyIn() + " " + economy.currencyNamePlural() }));
 		
 		closeButton.registerClickHandler(player, new ClickHandler()
 		{
@@ -201,9 +203,9 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			return;
 		}
 		
-		playerGUIPage.removeComponent(slot1.getId());
-		playerGUIPage.removeComponent(slot2.getId());
-		playerGUIPage.removeComponent(slot3.getId());
+		playerGUIPage.removeComponent(slot1.getProperties().getId());
+		playerGUIPage.removeComponent(slot2.getProperties().getId());
+		playerGUIPage.removeComponent(slot3.getProperties().getId());
 		
 		slot1Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot1, slot1Elements, new Random().nextInt(slot1Elements.length))), intervals,
 				new ThreadSequenceCompleteCallback()
@@ -266,7 +268,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		@Override
 		public void run(BukkitIntervalRunnableContext context)
 		{
-			playerGUIPage.removeComponent(slotImage.getId());//remove the old image
+			playerGUIPage.removeComponent(slotImage.getProperties().getId());//remove the old image
 
 			if(context.containsKey("index"))
 			{

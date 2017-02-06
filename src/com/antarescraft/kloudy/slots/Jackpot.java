@@ -1,10 +1,12 @@
 package com.antarescraft.kloudy.slots;
 
-import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigElementKey;
-import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigProperty;
-import com.antarescraft.kloudy.hologuiapi.plugincore.config.DoubleConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigObject;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.PassthroughParams;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.ConfigElementKey;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.ConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.DoubleConfigProperty;
 
-public class Jackpot
+public class Jackpot implements ConfigObject
 {
 	@ConfigElementKey
 	private String jackpotType;
@@ -12,6 +14,8 @@ public class Jackpot
 	@DoubleConfigProperty(defaultValue = 0, maxValue = Double.MAX_VALUE, minValue = 0)
 	@ConfigProperty(key = "payout")
 	private double payout;
+	
+	private Jackpot(){}
 	
 	public double getPayout()
 	{
@@ -22,4 +26,7 @@ public class Jackpot
 	{
 		return String.format("{ name: %s, payout: %s }", jackpotType, Double.toString(payout));
 	}
+
+	@Override
+	public void configParseComplete(PassthroughParams params) {}
 }

@@ -2,15 +2,17 @@ package com.antarescraft.kloudy.slots;
 
 import java.util.HashMap;
 
-import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigElementMap;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigObject;
 import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigParser;
-import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigProperty;
-import com.antarescraft.kloudy.hologuiapi.plugincore.config.DoubleConfigProperty;
-import com.antarescraft.kloudy.hologuiapi.plugincore.config.OptionalConfigProperty;
-import com.antarescraft.kloudy.hologuiapi.plugincore.config.StringConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.PassthroughParams;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.ConfigElementMap;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.ConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.DoubleConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.OptionalConfigProperty;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.annotations.StringConfigProperty;
 import com.antarescraft.kloudy.hologuiapi.plugincore.messaging.MessageManager;
 
-public class SlotsConfiguration
+public class SlotsConfiguration implements ConfigObject
 {
 	private static SlotsConfiguration instance;
 	
@@ -22,7 +24,7 @@ public class SlotsConfiguration
 		
 		if(instance == null)
 		{
-			instance = ConfigParser.parse(Slots.pluginName, slots.getConfig(), SlotsConfiguration.class);
+			instance = ConfigParser.parse(slots.getConfig(), SlotsConfiguration.class, Slots.pluginName);
 		}
 	}
 	
@@ -30,7 +32,7 @@ public class SlotsConfiguration
 	{
 		if(instance == null)
 		{
-			instance = ConfigParser.parse(Slots.pluginName, slots.getConfig(), SlotsConfiguration.class);
+			instance = ConfigParser.parse(slots.getConfig(), SlotsConfiguration.class, Slots.pluginName);
 		}
 		
 		return instance;
@@ -41,7 +43,7 @@ public class SlotsConfiguration
 	@ConfigProperty(key = "slot-tick-sound")
 	private String slotTickSound;
 
-	@DoubleConfigProperty(defaultValue = 5.00, maxValue = Double.POSITIVE_INFINITY, minValue = 0)
+	@DoubleConfigProperty(defaultValue = 5.00, maxValue = Double.MAX_VALUE, minValue = 0)
 	@ConfigProperty(key = "buy-in")
 	private double buyIn;
 	
@@ -94,4 +96,7 @@ public class SlotsConfiguration
 		
 		return strBuilder.toString();	
 	}
+
+	@Override
+	public void configParseComplete(PassthroughParams params) {}
 }
