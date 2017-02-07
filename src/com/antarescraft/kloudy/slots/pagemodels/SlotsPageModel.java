@@ -79,7 +79,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			}
 		}
 		
-		buyInLabel = (LabelComponent)guiPage.getComponent("buy-in").clone();
+		buyInLabel = (LabelComponent)guiPage.getComponent("buy-in");
 		closeButton = (ButtonComponent)guiPage.getComponent("close-btn");
 		rollButton = (ButtonComponent)guiPage.getComponent("roll-btn");
 		slot1 = (ImageComponent)guiPage.getComponent("slot-1").clone();
