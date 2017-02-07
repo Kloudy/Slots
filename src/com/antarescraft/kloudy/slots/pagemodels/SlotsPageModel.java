@@ -1,7 +1,6 @@
 package com.antarescraft.kloudy.slots.pagemodels;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -87,8 +86,11 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		slot2 = (ImageComponent)guiPage.getComponent("slot-2").clone();
 		slot3 = (ImageComponent)guiPage.getComponent("slot-3").clone();
 		
-		buyInLabel.getProperties().setLines((ArrayList<String>) Arrays.asList(new String[]{ "&6&lBUY IN: &a&l" + config.getBuyIn() + " " + economy.currencyNamePlural() }));
+		ArrayList<String> lines = new ArrayList<String>();
+		lines.add("&6&lBUY IN: &a&l" + config.getBuyIn() + " " + economy.currencyNamePlural());
 		
+		buyInLabel.getProperties().setLines(lines);
+	
 		closeButton.registerClickHandler(player, new ClickHandler()
 		{
 			@Override
