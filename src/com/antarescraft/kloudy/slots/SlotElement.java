@@ -2,7 +2,7 @@ package com.antarescraft.kloudy.slots;
 
 public enum SlotElement
 {
-	QUESTION(null, "question-block.gif"),
+	WILD(null, "question-block.gif"),
 	COIN("coin-jackpot", "coin.gif"),
 	RING("ring-jackpot", "ring.gif"),
 	STAR("star-jackpot", "star.gif"),

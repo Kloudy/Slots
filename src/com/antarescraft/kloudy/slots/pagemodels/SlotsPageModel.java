@@ -212,13 +212,43 @@ public class SlotsPageModel extends PlayerGUIPageModel
 	}
 	
 	/*
+	 * Finds the non-wild slotElement in the result.
+	 * There is guaranteed to be at least 1 non-wild slot result
+	 */
+	private SlotElement findNonWildSlot()
+	{
+		for(SlotElement slotElement : slotResultElements)
+		{
+			if(slotElement != SlotElement.WILD)
+			{
+				return slotElement;
+			}
+		}
+		
+		return null;
+	}
+	
+	/*
 	 * Checks to see if the player won a jackpot and if so awards the player the payout
 	 */
 	private void checkJackpot()
 	{
-		int sum = slotResultElements[0].getValue() + slotResultElements[1].getValue() + slotResultElements[2].getValue();
+		// If a wild is rolled, set it to be the first non-wild element in the result
 		
+		if(slotResultElements[0] == SlotElement.WILD)
+		{
+			slotResultElements[0] = findNonWildSlot();
+		}
 		
+		if(slotResultElements[1] == SlotElement.WILD)
+		{
+			slotResultElements[1] = findNonWildSlot();
+		}
+		
+		if(slotResultElements[2] == SlotElement.WILD)
+		{
+			slotResultElements[2] = findNonWildSlot();
+		}
 		
 		//all three slots have the same element, jackpot!
 		if(slotResultElements[0] == slotResultElements[1] && slotResultElements[0] == slotResultElements[2])
