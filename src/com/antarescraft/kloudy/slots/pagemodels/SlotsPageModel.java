@@ -323,9 +323,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			}
 			
 			context.setContextVariable("selection", slotElements[index]);
-			
-			// clone the slot image and set the new lines
-			slotImage = GUIComponentFactory.createImageComponent(plugin, slotImage.getProperties());			
+						
 			slotImage.setLines(imageLines.get(slotElements[index].getImageName()));
 			
 			playerGUIPage.renderComponent(slotImage);//render new image
