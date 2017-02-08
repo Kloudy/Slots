@@ -116,11 +116,6 @@ public class SlotsPageModel extends PlayerGUIPageModel
 				
 				//render buy-in label
 				playerGUIPage.renderComponent(buyInLabel);
-				
-				//render the slot images
-				playerGUIPage.renderComponent(slot1);
-				playerGUIPage.renderComponent(slot2);
-				playerGUIPage.renderComponent(slot3);
 			}
 		});
 		
@@ -221,6 +216,10 @@ public class SlotsPageModel extends PlayerGUIPageModel
 	 */
 	private void checkJackpot()
 	{
+		int sum = slotResultElements[0].getValue() + slotResultElements[1].getValue() + slotResultElements[2].getValue();
+		
+		
+		
 		//all three slots have the same element, jackpot!
 		if(slotResultElements[0] == slotResultElements[1] && slotResultElements[0] == slotResultElements[2])
 		{
