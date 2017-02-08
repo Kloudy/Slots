@@ -8,7 +8,11 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
+import com.antarescraft.kloudy.hologuiapi.guicomponentproperties.ImageComponentProperties;
+import com.antarescraft.kloudy.hologuiapi.guicomponentproperties.LabelComponentProperties;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ButtonComponent;
+import com.antarescraft.kloudy.hologuiapi.guicomponents.ComponentPosition;
+import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIComponentFactory;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIPage;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ImageComponent;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.LabelComponent;
@@ -82,15 +86,9 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		buyInLabel = (LabelComponent)guiPage.getComponent("buy-in");
 		closeButton = (ButtonComponent)guiPage.getComponent("close-btn");
 		rollButton = (ButtonComponent)guiPage.getComponent("roll-btn");
-		slot1 = (ImageComponent)guiPage.getComponent("slot-1").clone();
-		slot2 = (ImageComponent)guiPage.getComponent("slot-2").clone();
-		slot3 = (ImageComponent)guiPage.getComponent("slot-3").clone();
+
+		initDynamicComponents();
 		
-		ArrayList<String> lines = new ArrayList<String>();
-		lines.add("&6&lBUY IN: &a&l" + config.getBuyIn() + " " + economy.currencyNamePlural());
-		
-		buyInLabel.getProperties().setLines(lines);
-	
 		closeButton.registerClickHandler(player, new ClickHandler()
 		{
 			@Override
@@ -137,6 +135,53 @@ public class SlotsPageModel extends PlayerGUIPageModel
 				if(slot3Roller != null)slot3Roller.cancel();
 			}
 		});
+	}
+	
+	/*
+	 *Initializes all of the dynamic gui components on the slot machine gui
+	 */
+	private void initDynamicComponents()
+	{
+		ArrayList<String> lines = new ArrayList<String>();
+		lines.add("&6&lBUY IN: &a&l" + config.getBuyIn() + " " + economy.currencyNamePlural());
+		
+		LabelComponentProperties buyInLabelProperties = new LabelComponentProperties();
+		buyInLabelProperties.setId("buy-in");
+		buyInLabelProperties.setLabelDistance(6);
+		buyInLabelProperties.setLines(lines);
+		buyInLabelProperties.setPosition(new ComponentPosition(0, -0.2));
+		
+		buyInLabel = GUIComponentFactory.createLabelComponent(plugin, buyInLabelProperties);
+		
+		ImageComponentProperties slot1Properties = new ImageComponentProperties();
+		slot1Properties.setId("slot1");
+		slot1Properties.setImageSource("question-block.gif");
+		slot1Properties.setSymmetrical(true);
+		slot1Properties.setWidth(18);
+		slot1Properties.setHeight(18);
+		slot1Properties.setPosition(new ComponentPosition(-0.45, 0.35));
+		
+		slot1 = GUIComponentFactory.createImageComponent(plugin, slot1Properties);
+		
+		ImageComponentProperties slot2Properties = new ImageComponentProperties();
+		slot2Properties.setId("slot2");
+		slot2Properties.setImageSource("question-block.gif");
+		slot2Properties.setSymmetrical(true);
+		slot2Properties.setWidth(18);
+		slot2Properties.setHeight(18);
+		slot2Properties.setPosition(new ComponentPosition(-0, 0.38));
+		
+		slot2 = GUIComponentFactory.createImageComponent(plugin, slot2Properties);
+		
+		ImageComponentProperties slot3Properties = new ImageComponentProperties();
+		slot3Properties.setId("slot3");
+		slot3Properties.setImageSource("question-block.gif");
+		slot3Properties.setSymmetrical(true);
+		slot3Properties.setWidth(18);
+		slot3Properties.setHeight(18);
+		slot3Properties.setPosition(new ComponentPosition(0.44, 0.35));
+		
+		slot3 = GUIComponentFactory.createImageComponent(plugin, slot3Properties);
 	}
 	
 	//Function used for debugging purposes to generate a roll that will result in a jackpot of the specified type
@@ -279,8 +324,10 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			
 			context.setContextVariable("selection", slotElements[index]);
 			
-			slotImage = slotImage.clone();
+			// clone the slot image and set the new lines
+			slotImage = GUIComponentFactory.createImageComponent(plugin, slotImage.getProperties());			
 			slotImage.setLines(imageLines.get(slotElements[index].getImageName()));
+			
 			playerGUIPage.renderComponent(slotImage);//render new image
 
 			index = (index + 1) % slotElements.length;
