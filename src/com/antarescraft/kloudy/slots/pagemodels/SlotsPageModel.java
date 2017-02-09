@@ -144,7 +144,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		buyInLabelProperties.setId("buy-in");
 		buyInLabelProperties.setLabelDistance(6);
 		buyInLabelProperties.setLines(lines);
-		buyInLabelProperties.setPosition(new ComponentPosition(0, -0.2));
+		buyInLabelProperties.setPosition(new ComponentPosition(0, -0.3));
 		
 		buyInLabel = GUIComponentFactory.createLabelComponent(plugin, buyInLabelProperties);
 		

@@ -12,11 +12,12 @@ slot-machine:
       onclick-sound: "UI_BUTTON_CLICK"
       position:
         x: 0
-        y: -0.3
+        y: -0.35
 
     close-btn:
       type: "button"
-      label: "Exit"
+      label: "&lEXIT"
+      always-show-label: true
       symmetrical: true
       mini: true
       icon: "x-red.gif"
