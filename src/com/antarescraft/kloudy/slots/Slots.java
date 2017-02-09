@@ -27,7 +27,7 @@ public class Slots extends HoloGUIPlugin
 		
 		getCommand("slots").setExecutor(new CommandEvent(this));
 		
-		//copyResourceConfigs(true);
+		copyResourceConfigs(true);
 		
 		if(!setupEconomy())
 		{
