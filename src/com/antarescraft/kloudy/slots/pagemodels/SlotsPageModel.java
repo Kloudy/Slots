@@ -26,7 +26,6 @@ public class SlotsPageModel extends BaseSlotsPageModel
 	private SlotsConfiguration config;
 	
 	private LabelComponent buyInLabel;
-	private ButtonComponent closeButton;
 	private ButtonComponent rollButton;
 	private ButtonComponent tutorialButton;
 		
@@ -41,7 +40,6 @@ public class SlotsPageModel extends BaseSlotsPageModel
 		economy = ((Slots)plugin).getEconomy();
 		
 		buyInLabel = (LabelComponent)guiPage.getComponent("buy-in");
-		closeButton = (ButtonComponent)guiPage.getComponent("close-btn");
 		rollButton = (ButtonComponent)guiPage.getComponent("roll-btn");
 		tutorialButton = (ButtonComponent)guiPage.getComponent("tutorial-btn");
 
@@ -56,19 +54,6 @@ public class SlotsPageModel extends BaseSlotsPageModel
 		
 		buyInLabel = GUIComponentFactory.createLabelComponent(plugin, buyInLabelProperties);
 		
-		closeButton.registerClickHandler(player, new ClickHandler()
-		{
-			@Override
-			public void onClick()
-			{
-				plugin.getHoloGUIApi().closeGUIPage(player);
-				
-				// Player is no longer playing, update the player's 'playing' state.
-				Slots slots = (Slots)plugin;
-				slots.isPlaying(player, false);
-			}
-		});
-		
 		rollButton.registerClickHandler(player, new ClickHandler()
 		{
 			@Override
@@ -82,7 +67,7 @@ public class SlotsPageModel extends BaseSlotsPageModel
 				
 					isRolling = true;
 					
-					roll();
+					roll(true);
 				}
 				else
 				{

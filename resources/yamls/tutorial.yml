@@ -14,35 +14,33 @@ tutorial:
         x: 0.8
         y: 0.8
 
-    slot1:
-      type: "image"
-      image-src: "star.gif"
-      symmetrical: true
-      width: 18
-      height: 18
+    jackpot-label:
+      type: "label"
+      label-distance: 6
+      text:
+        - "&lRoll 3 of the same item to win the jackpot!"
       position:
-        x: -0.45
-        y: 0.35
+        x: 0
+        y: 0.5
 
-    slot2:
-      type: "image"
-      image-src: "star.gif"
-      symmetrical: true
-      width: 18
-      height: 18
+    wild-label:
+      type: "label"
+      label-distance: 6
+      text:
+        - "&lThe wild block can be ANY item"
       position:
-        x: -0
-        y: 0.38
+        x: 0
+        y: -0.2
 
-    slot3:
+    wild-img:
       type: "image"
-      image-src: "star.gif"
-      symmetrical: true
+      image-src: "question-block.gif"
       width: 18
       height: 18
+      symmetrical: true
       position:
-        x: 0.44
-        y: 0.35
+        x: 0
+        y: -0.2
 
     done-btn:
       type: "button"

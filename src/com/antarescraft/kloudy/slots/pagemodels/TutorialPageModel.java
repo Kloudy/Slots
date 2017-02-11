@@ -28,6 +28,8 @@ public class TutorialPageModel extends BaseSlotsPageModel
 			public void onPageLoad(PlayerGUIPage _playerGUIPage)
 			{
 				playerGUIPage = _playerGUIPage;
+				
+				roll(forcedResults[resultIndex], false);
 			}
 		});
 		
@@ -48,7 +50,7 @@ public class TutorialPageModel extends BaseSlotsPageModel
 	{
 		resultIndex = (resultIndex + 1) % forcedResults.length;
 		
-		roll(forcedResults[resultIndex], 20); // waits a second before rolling again
+		roll(forcedResults[resultIndex], 40, false); // waits a second before rolling again
 	}
 	
 	@Override

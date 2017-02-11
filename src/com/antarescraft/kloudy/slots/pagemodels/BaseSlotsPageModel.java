@@ -5,13 +5,16 @@ import java.util.Random;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
 import com.antarescraft.kloudy.hologuiapi.guicomponentproperties.ImageComponentProperties;
+import com.antarescraft.kloudy.hologuiapi.guicomponents.ButtonComponent;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ComponentPosition;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIComponentFactory;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIPage;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ImageComponent;
+import com.antarescraft.kloudy.hologuiapi.handlers.ClickHandler;
 import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageCloseHandler;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPage;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPageModel;
@@ -31,6 +34,8 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 	private ImageComponent slot1;
 	private ImageComponent slot2;
 	private ImageComponent slot3;
+	
+	private ButtonComponent closeButton;
 	
 	private BukkitIntervalRunnableScheduler slot1Roller;
 	private BukkitIntervalRunnableScheduler slot2Roller;
@@ -71,28 +76,38 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 			@Override
 			public void onPageClose()
 			{
-				//cancel all of the slot roller threads
-				if(slot1Roller != null)slot1Roller.cancel();
-				if(slot2Roller != null)slot2Roller.cancel();
-				if(slot3Roller != null)slot3Roller.cancel();
+				stopRollerThreads();
+								
+				// Player is no longer playing, update the player's 'playing' state.
+				Slots slots = (Slots)plugin;
+				slots.isPlaying(player, false);
 			}
 		});
 		
-		guiPage.registerPageCloseHandler(player, new GUIPageCloseHandler()
+		closeButton = (ButtonComponent)guiPage.getComponent("close-btn");
+		
+		closeButton.registerClickHandler(player, new ClickHandler()
 		{
 			@Override
-			public void onPageClose()
+			public void onClick()
 			{
-				//cancel all of the slot roller threads
-				if(slot1Roller != null)slot1Roller.cancel();
-				if(slot2Roller != null)slot2Roller.cancel();
-				if(slot3Roller != null)slot3Roller.cancel();
+				plugin.getHoloGUIApi().closeGUIPage(player);
 			}
 		});
 	}
 	
 	protected abstract void jackpot(SlotElement element);
 	protected abstract void rollComplete();
+	
+	/* 
+	 * Cancel all of the slot roller threads
+	 */
+	protected void stopRollerThreads()
+	{
+		if(slot1Roller != null)slot1Roller.cancel();
+		if(slot2Roller != null)slot2Roller.cancel();
+		if(slot3Roller != null)slot3Roller.cancel();
+	}
 	
 	/*
 	 *Initializes all of the dynamic gui components on the slot machine gui
@@ -176,14 +191,19 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		}
 	}
 	
-	protected void roll()
+	protected void roll(boolean playTickSound)
 	{
-		roll(0);
+		roll(0, playTickSound);
 	}
 	
-	protected void roll(long delay)
+	protected void roll(long delay, boolean playTickSound)
 	{
-		roll(null, delay);
+		roll(null, delay, playTickSound);
+	}
+	
+	protected void roll(SlotElement forcedResult, boolean playTickSound)
+	{
+		roll(forcedResult, 0, playTickSound);
 	}
 	
 	/*
@@ -191,13 +211,20 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 	 * 
 	 * Force the roll to create jackpot with the specified forcedResult SlotElement. If 'forcedResult' is null, then a random roll will occur
 	 */
-	protected void roll(SlotElement forcedResult, long delay)
+	protected void roll(SlotElement forcedResult, long delay, boolean playTickSound)
 	{
-		playerGUIPage.removeComponent(slot1.getProperties().getId());
-		playerGUIPage.removeComponent(slot2.getProperties().getId());
-		playerGUIPage.removeComponent(slot3.getProperties().getId());
-		
-		slot1Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot1, slot1Elements, new Random().nextInt(slot1Elements.length))), intervals,
+		new BukkitRunnable()
+		{
+			@Override
+			public void run()
+			{
+				playerGUIPage.removeComponent(slot1.getProperties().getId());
+				playerGUIPage.removeComponent(slot2.getProperties().getId());
+				playerGUIPage.removeComponent(slot3.getProperties().getId());
+			}
+		}.runTaskLater(plugin, delay);
+
+		slot1Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot1, slot1Elements, new Random().nextInt(slot1Elements.length), playTickSound)), intervals,
 				new ThreadSequenceCompleteCallback()
 				{
 					@Override
@@ -221,7 +248,7 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 				}
 		);
 		
-		slot2Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot2, slot2Elements, new Random().nextInt(slot2Elements.length))), intervals, 
+		slot2Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot2, slot2Elements, new Random().nextInt(slot2Elements.length), playTickSound)), intervals, 
 				new ThreadSequenceCompleteCallback()
 				{
 					@Override
@@ -245,7 +272,7 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 				}
 		);
 		
-		slot3Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot3, slot3Elements, new Random().nextInt(slot3Elements.length))), intervals, 
+		slot3Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot3, slot3Elements, new Random().nextInt(slot3Elements.length), playTickSound)), intervals, 
 				new ThreadSequenceCompleteCallback()
 				{
 					@Override
@@ -304,12 +331,14 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		private ImageComponent slotImage;
 		private SlotElement[] slotElements;
 		private int index;
+		private boolean playTickSound;
 		
-		public RollerThread(ImageComponent slotImage, SlotElement[] slotElements, int index)
+		public RollerThread(ImageComponent slotImage, SlotElement[] slotElements, int index, boolean playTickSound)
 		{
 			this.slotImage = slotImage;
 			this.slotElements = slotElements;
 			this.index = index;
+			this.playTickSound = playTickSound;
 		}
 		
 		@Override
@@ -330,17 +359,20 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 
 			index = (index + 1) % slotElements.length;
 			
-			Sound slotTickSound = Sound.valueOf(SlotsConfiguration.getSlotsConfiguration((Slots)plugin).getSlotTickSound());
-			if(slotTickSound != null)
+			if(playTickSound)
 			{
-				player.playSound(player.getLocation(), slotTickSound, 0.5f, 1);
+				Sound slotTickSound = Sound.valueOf(SlotsConfiguration.getSlotsConfiguration((Slots)plugin).getSlotTickSound());
+				if(slotTickSound != null)
+				{
+					player.playSound(player.getLocation(), slotTickSound, 0.5f, 1);
+				}
 			}
 		}
 		
 		@Override
 		public RollerThread clone()
 		{
-			return new RollerThread(slotImage, slotElements, index);
+			return new RollerThread(slotImage, slotElements, index, playTickSound);
 		}
 	}
 }
