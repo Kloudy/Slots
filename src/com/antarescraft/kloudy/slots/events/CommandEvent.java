@@ -37,6 +37,8 @@ public class CommandEvent implements CommandExecutor
 	{
 		slots.getHoloGUIApi().destroyGUIPages(slots);
 
+		slots.removeAllPlayers();
+		
 		SlotsConfiguration.loadConfig(slots);
 		
 		MessageManager.info(sender, "Reloaded the config");

@@ -2,18 +2,6 @@ tutorial:
 
   components:
 
-    roll-btn:
-      type: "button"
-      mini: true
-      symmetrical: true
-      icon: "dice.png"
-      label: "&6&lROLL"
-      always-show-label: true
-      onclick-sound: "UI_BUTTON_CLICK"
-      position:
-        x: 0
-        y: -0.35
-
     close-btn:
       type: "button"
       label: "&lEXIT"
@@ -24,16 +12,46 @@ tutorial:
       onclick-sound: "UI_BUTTON_CLICK"
       position:
         x: 0.8
-        y: -0.3
+        y: 0.8
 
-    tutorial-btn:
+    slot1:
+      type: "image"
+      image-src: "star.gif"
+      symmetrical: true
+      width: 18
+      height: 18
+      position:
+        x: -0.45
+        y: 0.35
+
+    slot2:
+      type: "image"
+      image-src: "star.gif"
+      symmetrical: true
+      width: 18
+      height: 18
+      position:
+        x: -0
+        y: 0.38
+
+    slot3:
+      type: "image"
+      image-src: "star.gif"
+      symmetrical: true
+      width: 18
+      height: 18
+      position:
+        x: 0.44
+        y: 0.35
+
+    done-btn:
       type: "button"
       mini: true
-      label: "&lHow to Play"
-      symmetrical: true
+      icon: "confirm.png"
+      label: "&lGot It!"
       always-show-label: true
-      icon: "question-mark.png"
+      symmetrical: true
       onclick-sound: "UI_BUTTON_CLICK"
       position:
-        x: -0.8
+        x: 0.8
         y: -0.3

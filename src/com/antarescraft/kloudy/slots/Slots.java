@@ -95,4 +95,9 @@ public class Slots extends HoloGUIPlugin
 			players.remove(player.getUniqueId());
 		}
 	}
+	
+	public void removeAllPlayers()
+	{
+		players.clear();
+	}
 }

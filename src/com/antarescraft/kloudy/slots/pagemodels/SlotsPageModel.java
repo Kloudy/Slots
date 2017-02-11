@@ -33,7 +33,7 @@ import com.antarescraft.kloudy.slots.util.ThreadSequenceCompleteCallback;
 
 import net.milkbowl.vault.economy.Economy;
 
-public class SlotsPageModel extends PlayerGUIPageModel
+public class SlotsPageModel extends BaseSlotsPageModel
 {
 	private PlayerGUIPage playerGUIPage;
 	
@@ -42,24 +42,7 @@ public class SlotsPageModel extends PlayerGUIPageModel
 	private LabelComponent buyInLabel;
 	private ButtonComponent closeButton;
 	private ButtonComponent rollButton;
-	private ImageComponent slot1;
-	private ImageComponent slot2;
-	private ImageComponent slot3;
-	
-	private BukkitIntervalRunnableScheduler slot1Roller;
-	private BukkitIntervalRunnableScheduler slot2Roller;
-	private BukkitIntervalRunnableScheduler slot3Roller;
-	private boolean isRolling = false;
-	
-	//array of selected slot elements after the slot finishes rolling
-	SlotElement[] slotResultElements = new SlotElement[3];
-	
-	//tick intervals that the slot elements change while rolling
-	private static final int[] intervals = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 7 };
-	
-	private static SlotElement[] slot1Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.COIN, SlotElement.TNT, SlotElement.WILD, SlotElement.COIN, SlotElement.TROPHY, SlotElement.WILD};
-	private static SlotElement[] slot2Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.COIN, SlotElement.TNT, SlotElement.COIN, SlotElement.TROPHY};
-	private static SlotElement[] slot3Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.COIN, SlotElement.TNT, SlotElement.WILD, SlotElement.COIN, SlotElement.TROPHY, SlotElement.WILD};
+	private ButtonComponent tutorialButton;
 	
 	private static HashMap<String, String[][]> imageLines;
 	
@@ -86,8 +69,20 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		buyInLabel = (LabelComponent)guiPage.getComponent("buy-in");
 		closeButton = (ButtonComponent)guiPage.getComponent("close-btn");
 		rollButton = (ButtonComponent)guiPage.getComponent("roll-btn");
+		tutorialButton = (ButtonComponent)guiPage.getComponent("tutorial-btn");
 
-		initDynamicComponents();
+		ArrayList<String> lines = new ArrayList<String>();
+		lines.add("&6&lBUY IN: &a&l" + config.getBuyIn() + " " + economy.currencyNamePlural());
+		
+		LabelComponentProperties buyInLabelProperties = new LabelComponentProperties();
+		buyInLabelProperties.setId("buy-in");
+		buyInLabelProperties.setLabelDistance(6);
+		buyInLabelProperties.setLines(lines);
+		buyInLabelProperties.setPosition(new ComponentPosition(0, -0.3));
+		
+		buyInLabel = GUIComponentFactory.createLabelComponent(plugin, buyInLabelProperties);
+		
+		initSlotImages();
 		
 		closeButton.registerClickHandler(player, new ClickHandler()
 		{
@@ -107,7 +102,32 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			@Override
 			public void onClick()
 			{
-				roll();
+				if(isRolling) return;//already rolling
+				
+				if(economy.getBalance(player) >= config.getBuyIn())
+				{
+					economy.withdrawPlayer(player, config.getBuyIn());//withdraw the buy-in amount from the player's account
+				
+					isRolling = true;
+					
+					roll();
+				}
+				else
+				{
+					player.sendMessage(config.getNotEnoughMoneyMessage());
+					
+					return;
+				}
+			}
+		});
+		
+		tutorialButton.registerClickHandler(player, new ClickHandler()
+		{
+			@Override
+			public void onClick()
+			{
+				TutorialPageModel model = new TutorialPageModel(plugin, plugin.getGUIPage("tutorial"), player);
+				plugin.getHoloGUIApi().openGUIPage(plugin, player, model);
 			}
 		});
 				
@@ -122,193 +142,6 @@ public class SlotsPageModel extends PlayerGUIPageModel
 				playerGUIPage.renderComponent(buyInLabel);
 			}
 		});
-		
-		guiPage.registerPageCloseHandler(player, new GUIPageCloseHandler()
-		{
-			@Override
-			public void onPageClose()
-			{
-				//cancel all of the slot roller threads
-				if(slot1Roller != null)slot1Roller.cancel();
-				if(slot2Roller != null)slot2Roller.cancel();
-				if(slot3Roller != null)slot3Roller.cancel();
-			}
-		});
-	}
-	
-	/*
-	 *Initializes all of the dynamic gui components on the slot machine gui
-	 */
-	private void initDynamicComponents()
-	{
-		ArrayList<String> lines = new ArrayList<String>();
-		lines.add("&6&lBUY IN: &a&l" + config.getBuyIn() + " " + economy.currencyNamePlural());
-		
-		LabelComponentProperties buyInLabelProperties = new LabelComponentProperties();
-		buyInLabelProperties.setId("buy-in");
-		buyInLabelProperties.setLabelDistance(6);
-		buyInLabelProperties.setLines(lines);
-		buyInLabelProperties.setPosition(new ComponentPosition(0, -0.3));
-		
-		buyInLabel = GUIComponentFactory.createLabelComponent(plugin, buyInLabelProperties);
-		
-		ImageComponentProperties slot1Properties = new ImageComponentProperties();
-		slot1Properties.setId("slot1");
-		slot1Properties.setImageSource("question-block.gif");
-		slot1Properties.setSymmetrical(true);
-		slot1Properties.setWidth(18);
-		slot1Properties.setHeight(18);
-		slot1Properties.setPosition(new ComponentPosition(-0.45, 0.35));
-		
-		slot1 = GUIComponentFactory.createImageComponent(plugin, slot1Properties);
-		
-		ImageComponentProperties slot2Properties = new ImageComponentProperties();
-		slot2Properties.setId("slot2");
-		slot2Properties.setImageSource("question-block.gif");
-		slot2Properties.setSymmetrical(true);
-		slot2Properties.setWidth(18);
-		slot2Properties.setHeight(18);
-		slot2Properties.setPosition(new ComponentPosition(-0, 0.38));
-		
-		slot2 = GUIComponentFactory.createImageComponent(plugin, slot2Properties);
-		
-		ImageComponentProperties slot3Properties = new ImageComponentProperties();
-		slot3Properties.setId("slot3");
-		slot3Properties.setImageSource("question-block.gif");
-		slot3Properties.setSymmetrical(true);
-		slot3Properties.setWidth(18);
-		slot3Properties.setHeight(18);
-		slot3Properties.setPosition(new ComponentPosition(0.44, 0.35));
-		
-		slot3 = GUIComponentFactory.createImageComponent(plugin, slot3Properties);
-	}
-	
-	/*
-	 * Sets the result of the slot roll
-	 */
-	private void setResult(int slotIndex, SlotElement element)
-	{
-		slotResultElements[slotIndex] = element;
-	}
-	
-	/*
-	 * Finds the non-wild slotElement in the result.
-	 * There is guaranteed to be at least 1 non-wild slot result
-	 */
-	private SlotElement findNonWildSlot()
-	{
-		for(SlotElement slotElement : slotResultElements)
-		{
-			if(slotElement != SlotElement.WILD)
-			{
-				return slotElement;
-			}
-		}
-		
-		return null;
-	}
-	
-	/*
-	 * Checks to see if the player won a jackpot and if so awards the player the payout
-	 */
-	private void checkJackpot()
-	{
-		// If a wild is rolled, set it to be the first non-wild element in the result
-		
-		if(slotResultElements[0] == SlotElement.WILD)
-		{
-			slotResultElements[0] = findNonWildSlot();
-		}
-		
-		if(slotResultElements[1] == SlotElement.WILD)
-		{
-			slotResultElements[1] = findNonWildSlot();
-		}
-		
-		if(slotResultElements[2] == SlotElement.WILD)
-		{
-			slotResultElements[2] = findNonWildSlot();
-		}
-		
-		//all three slots have the same element, jackpot!
-		if(slotResultElements[0] == slotResultElements[1] && slotResultElements[0] == slotResultElements[2])
-		{
-			//deposit the jackpot payout amount into the player's account
-			double payout = config.getJackpot(slotResultElements[0].getTypeId()).getPayout();
-			economy.depositPlayer(player, payout);
-			
-			MessageManager.success(player, "Jackpot! You won " + payout  + economy.currencyNamePlural() + "!");
-		}
-	}
-	
-	/*
-	 * Rolls the slot machine
-	 */
-	private void roll()
-	{
-		if(isRolling) return;//already rolling
-		
-		if(economy.getBalance(player) >= config.getBuyIn())
-		{
-			economy.withdrawPlayer(player, config.getBuyIn());//withdraw the buy-in amount from the player's account
-		}
-		else
-		{
-			player.sendMessage(config.getNotEnoughMoneyMessage());
-			
-			return;
-		}
-		
-		playerGUIPage.removeComponent(slot1.getProperties().getId());
-		playerGUIPage.removeComponent(slot2.getProperties().getId());
-		playerGUIPage.removeComponent(slot3.getProperties().getId());
-		
-		slot1Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot1, slot1Elements, new Random().nextInt(slot1Elements.length))), intervals,
-				new ThreadSequenceCompleteCallback()
-				{
-					@Override
-					public void call(BukkitIntervalRunnableContext context)
-					{
-						SlotElement element = (SlotElement)context.getContextVariable("selection");
-						setResult(0, element);
-						
-						slot2Roller.run();
-					}
-				}
-		);
-		
-		slot2Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot2, slot2Elements, new Random().nextInt(slot2Elements.length))), intervals, 
-				new ThreadSequenceCompleteCallback()
-				{
-					@Override
-					public void call(BukkitIntervalRunnableContext context)
-					{
-						SlotElement element = (SlotElement)context.getContextVariable("selection");
-						setResult(1, element);
-						
-						slot3Roller.run();
-					}
-				}
-		);
-		
-		slot3Roller = new BukkitIntervalRunnableScheduler(plugin, new BukkitIntervalRunnableTask(new RollerThread(slot3, slot3Elements, new Random().nextInt(slot3Elements.length))), intervals, 
-				new ThreadSequenceCompleteCallback()
-				{
-					@Override
-					public void call(BukkitIntervalRunnableContext context)
-					{
-						SlotElement element = (SlotElement)context.getContextVariable("selection");
-						setResult(2, element);
-						
-						checkJackpot();
-						
-						isRolling = false;
-					}
-				});
-		
-		isRolling = true;
-		
-		slot1Roller.run();
 	}
 	
 	public class RollerThread implements BukkitIntervalRunnable
