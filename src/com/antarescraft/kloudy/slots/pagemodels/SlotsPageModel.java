@@ -179,30 +179,6 @@ public class SlotsPageModel extends PlayerGUIPageModel
 		slot3 = GUIComponentFactory.createImageComponent(plugin, slot3Properties);
 	}
 	
-	//Function used for debugging purposes to generate a roll that will result in a jackpot of the specified type
-	/*private void createJackpot(SlotElement element)
-	{
-		slot1Elements = new SlotElement[]{element};
-		slot2Elements = new SlotElement[]{element};
-		slot3Elements = new SlotElement[]{element};
-	}*/
-	
-	/**
-	 * Returns the total amount of time it takes to complete one slot roll
-	 */
-	private static int rollTime()
-	{
-		int t = 0;
-		for(int interval : intervals)
-		{
-			t += interval;
-		}
-		
-		t+= 5;//add 10 tick delay to the end
-		
-		return t;
-	}
-	
 	/*
 	 * Sets the result of the slot roll
 	 */
@@ -291,6 +267,8 @@ public class SlotsPageModel extends PlayerGUIPageModel
 					{
 						SlotElement element = (SlotElement)context.getContextVariable("selection");
 						setResult(0, element);
+						
+						slot2Roller.run();
 					}
 				}
 		);
@@ -303,6 +281,8 @@ public class SlotsPageModel extends PlayerGUIPageModel
 					{
 						SlotElement element = (SlotElement)context.getContextVariable("selection");
 						setResult(1, element);
+						
+						slot3Roller.run();
 					}
 				}
 		);
@@ -323,9 +303,8 @@ public class SlotsPageModel extends PlayerGUIPageModel
 				});
 		
 		isRolling = true;
-		slot1Roller.run(0);
-		slot2Roller.run(rollTime());
-		slot3Roller.run(rollTime() * 2);
+		
+		slot1Roller.run();
 	}
 	
 	public class RollerThread implements BukkitIntervalRunnable

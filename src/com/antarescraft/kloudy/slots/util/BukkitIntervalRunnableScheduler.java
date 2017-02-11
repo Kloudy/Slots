@@ -36,6 +36,11 @@ public class BukkitIntervalRunnableScheduler
 		context = new BukkitIntervalRunnableContext();
 	}
 	
+	public void run()
+	{
+		run(0);
+	}
+	
 	/**
 	 * Starts running the thread sequence
 	 */
