@@ -19,8 +19,6 @@ import com.antarescraft.kloudy.slots.SlotElement;
 import com.antarescraft.kloudy.slots.Slots;
 import com.antarescraft.kloudy.slots.SlotsConfiguration;
 
-import net.milkbowl.vault.economy.Economy;
-
 public class SlotsPageModel extends BaseSlotsPageModel
 {
 	private SlotsConfiguration config;
@@ -28,16 +26,12 @@ public class SlotsPageModel extends BaseSlotsPageModel
 	private LabelComponent buyInLabel;
 	private ButtonComponent rollButton;
 	private ButtonComponent tutorialButton;
-		
-	private Economy economy;
-	
+
 	public SlotsPageModel(final HoloGUIPlugin plugin, GUIPage guiPage, final Player player)
 	{
 		super(plugin, guiPage, player);
 				
 		config = SlotsConfiguration.getSlotsConfiguration((Slots)plugin);
-		
-		economy = ((Slots)plugin).getEconomy();
 		
 		buyInLabel = (LabelComponent)guiPage.getComponent("buy-in");
 		rollButton = (ButtonComponent)guiPage.getComponent("roll-btn");

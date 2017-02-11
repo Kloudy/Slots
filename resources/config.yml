@@ -15,22 +15,21 @@ already-playing: "&c&lYou are already playing Slots!"  # Message displayed to th
 jackpots:
 
   coin-jackpot:    # 1/5 (20%) chance of rolling this jackpot. This is the most common jackpot
+    name: "Coin Jackpot"
     payout: 15.00  # How much money the slot machine will pay out when the player wins this jackpot
 
   ring-jackpot:    # 1/8 (12.5%) chance of rolling this jackpot
+    name: "Ring Jackpot"
     payout: 20.00
 
   star-jackpot:    # 1/12 (8.3%) chance of rolling this jackpot
+    name: "Star Jackpot"
     payout: 30.00
 
   tnt-jackpot:     # 1/20 (5%) chance of rolling this jackpot
+    name: "TNT Jackpot"
     payout: 50.00
 
-  cherry-jackpot:  # 1/50 (2%) chance of rolling this jackpot
-    payout: 125.00
-
   trophy-jackpot:  # 1/100 (1%) chance of rolling this jackpot
+    name: "Trophy Jackpot"
     payout: 250.00
-
-  diamond-jackpot: # 1/1000 (0.1%) chance of rolling this jackpot. This is the most rare jackpot to be rolled
-    payout: 2500.00

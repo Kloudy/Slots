@@ -27,6 +27,8 @@ import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableScheduler;
 import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableTask;
 import com.antarescraft.kloudy.slots.util.ThreadSequenceCompleteCallback;
 
+import net.milkbowl.vault.economy.Economy;
+
 public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 {
 	protected PlayerGUIPage playerGUIPage;
@@ -41,9 +43,9 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 	private BukkitIntervalRunnableScheduler slot2Roller;
 	private BukkitIntervalRunnableScheduler slot3Roller;
 	
-	private static SlotElement[] slot1Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.COIN, SlotElement.TNT, SlotElement.WILD, SlotElement.COIN, SlotElement.TROPHY, SlotElement.WILD};
-	private static SlotElement[] slot2Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.COIN, SlotElement.TNT, SlotElement.COIN, SlotElement.TROPHY};
-	private static SlotElement[] slot3Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.COIN, SlotElement.TNT, SlotElement.WILD, SlotElement.COIN, SlotElement.TROPHY, SlotElement.WILD};
+	private static SlotElement[] slot1Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.STAR, SlotElement.COIN, SlotElement.TNT, SlotElement.WILD, SlotElement.COIN, SlotElement.TROPHY, SlotElement.WILD, SlotElement.STAR};
+	private static SlotElement[] slot2Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.STAR, SlotElement.COIN, SlotElement.TNT, SlotElement.COIN, SlotElement.TROPHY, SlotElement.STAR};
+	private static SlotElement[] slot3Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.STAR, SlotElement.COIN, SlotElement.TNT, SlotElement.WILD, SlotElement.COIN, SlotElement.TROPHY, SlotElement.WILD, SlotElement.STAR};
 	
 	//tick intervals that the slot elements change while rolling
 	private static final int[] intervals = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 7 };
@@ -55,9 +57,13 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 	
 	private static HashMap<String, String[][]> imageLines = null;
 	
+	protected Economy economy;
+	
 	public BaseSlotsPageModel(HoloGUIPlugin plugin, GUIPage guiPage, Player player)
 	{
 		super(plugin, guiPage, player);
+		
+		economy = ((Slots)plugin).getEconomy();
 		
 		if(imageLines == null)//load the slot images if we haven't already done so
 		{

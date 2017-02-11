@@ -5,13 +5,12 @@ tutorial:
     close-btn:
       type: "button"
       label: "&lEXIT"
-      always-show-label: true
       symmetrical: true
       mini: true
       icon: "x-red.gif"
       onclick-sound: "UI_BUTTON_CLICK"
       position:
-        x: 0.8
+        x: 0.9
         y: 0.8
 
     jackpot-label:
@@ -21,7 +20,7 @@ tutorial:
         - "&lRoll 3 of the same item to win the jackpot!"
       position:
         x: 0
-        y: 0.5
+        y: 0.55
 
     wild-label:
       type: "label"
@@ -51,5 +50,5 @@ tutorial:
       symmetrical: true
       onclick-sound: "UI_BUTTON_CLICK"
       position:
-        x: 0.8
+        x: 0.9
         y: -0.3
