@@ -1,13 +1,13 @@
 package com.antarescraft.kloudy.slots.pagemodels;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
 import com.antarescraft.kloudy.hologuiapi.guicomponentproperties.ImageComponentProperties;
-import com.antarescraft.kloudy.hologuiapi.guicomponentproperties.LabelComponentProperties;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ComponentPosition;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIComponentFactory;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIPage;
@@ -15,9 +15,10 @@ import com.antarescraft.kloudy.hologuiapi.guicomponents.ImageComponent;
 import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageCloseHandler;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPage;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPageModel;
-import com.antarescraft.kloudy.hologuiapi.plugincore.messaging.MessageManager;
 import com.antarescraft.kloudy.slots.SlotElement;
-import com.antarescraft.kloudy.slots.pagemodels.SlotsPageModel.RollerThread;
+import com.antarescraft.kloudy.slots.Slots;
+import com.antarescraft.kloudy.slots.SlotsConfiguration;
+import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnable;
 import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableContext;
 import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableScheduler;
 import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableTask;
@@ -25,7 +26,7 @@ import com.antarescraft.kloudy.slots.util.ThreadSequenceCompleteCallback;
 
 public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 {
-	private PlayerGUIPage playerGUIPage;
+	protected PlayerGUIPage playerGUIPage;
 	
 	private ImageComponent slot1;
 	private ImageComponent slot2;
@@ -47,9 +48,23 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 	
 	protected boolean isRolling = false;
 	
+	private static HashMap<String, String[][]> imageLines = null;
+	
 	public BaseSlotsPageModel(HoloGUIPlugin plugin, GUIPage guiPage, Player player)
 	{
 		super(plugin, guiPage, player);
+		
+		if(imageLines == null)//load the slot images if we haven't already done so
+		{
+			imageLines = new HashMap<String, String[][]>();
+			
+			for(SlotElement slotElement : SlotElement.values())
+			{
+				imageLines.put(slotElement.getImageName(), plugin.loadImage(slotElement.getImageName(), 18, 18, true));
+			}
+		}
+		
+		initSlotImages();
 		
 		guiPage.registerPageCloseHandler(player, new GUIPageCloseHandler()
 		{
@@ -76,12 +91,13 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		});
 	}
 	
-	public abstract void jackpot(SlotElement element);
+	protected abstract void jackpot(SlotElement element);
+	protected abstract void rollComplete();
 	
 	/*
 	 *Initializes all of the dynamic gui components on the slot machine gui
 	 */
-	protected void initSlotImages()
+	private void initSlotImages()
 	{		
 		ImageComponentProperties slot1Properties = new ImageComponentProperties();
 		slot1Properties.setId("slot1");
@@ -134,7 +150,7 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 	/*
 	 * Checks to see if the player won a jackpot and if so awards the player the payout
 	 */
-	private boolean checkJackpot()
+	private void checkJackpot()
 	{
 		// If a wild is rolled, set it to be the first non-wild element in the result
 		
@@ -160,10 +176,22 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		}
 	}
 	
+	protected void roll()
+	{
+		roll(0);
+	}
+	
+	protected void roll(long delay)
+	{
+		roll(null, delay);
+	}
+	
 	/*
 	 * Rolls the slot machine
+	 * 
+	 * Force the roll to create jackpot with the specified forcedResult SlotElement. If 'forcedResult' is null, then a random roll will occur
 	 */
-	protected void roll()
+	protected void roll(SlotElement forcedResult, long delay)
 	{
 		playerGUIPage.removeComponent(slot1.getProperties().getId());
 		playerGUIPage.removeComponent(slot2.getProperties().getId());
@@ -175,8 +203,18 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 					@Override
 					public void call(BukkitIntervalRunnableContext context)
 					{
-						SlotElement element = (SlotElement)context.getContextVariable("selection");
-						setResult(0, element);
+						if(forcedResult != null)
+						{
+							renderForcedResult(slot1, forcedResult);
+							
+							setResult(0, forcedResult);
+						}
+						else
+						{
+							SlotElement element = (SlotElement)context.getContextVariable("selection");
+							
+							setResult(0, element);
+						}
 						
 						slot2Roller.run();
 					}
@@ -189,9 +227,19 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 					@Override
 					public void call(BukkitIntervalRunnableContext context)
 					{
-						SlotElement element = (SlotElement)context.getContextVariable("selection");
-						setResult(1, element);
-						
+						if(forcedResult != null)
+						{
+							renderForcedResult(slot2, forcedResult);
+							
+							setResult(1, forcedResult);
+						}
+						else
+						{
+							SlotElement element = (SlotElement)context.getContextVariable("selection");
+							
+							setResult(1, element);
+						}
+
 						slot3Roller.run();
 					}
 				}
@@ -203,21 +251,44 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 					@Override
 					public void call(BukkitIntervalRunnableContext context)
 					{
-						SlotElement element = (SlotElement)context.getContextVariable("selection");
-						setResult(2, element);
-						
-						if(checkJackpot())
+						if(forcedResult != null)
 						{
-							jackpot();
+							renderForcedResult(slot3, forcedResult);
+							
+							setResult(2, forcedResult);
 						}
+						else
+						{
+							SlotElement element = (SlotElement)context.getContextVariable("selection");
+							
+							setResult(2, element);
+						}
+
+						checkJackpot();
 						
 						isRolling = false;
+						
+						rollComplete();
 					}
 				});
 		
 		isRolling = true;
 		
-		slot1Roller.run();
+		slot1Roller.run(delay);
+	}
+	
+	/**
+	 * Renders the specified slot image with the input forcedResult
+	 * @param slotImage
+	 * @param forcedResult
+	 */
+	private void renderForcedResult(ImageComponent slotImage, SlotElement forcedResult)
+	{
+		playerGUIPage.removeComponent(slotImage.getProperties().getId());
+		
+		slotImage.setLines(imageLines.get(forcedResult.getImageName()));
+		
+		playerGUIPage.renderComponent(slotImage);
 	}
 	
 	/*
@@ -226,5 +297,50 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 	private void setResult(int slotIndex, SlotElement element)
 	{
 		slotResultElements[slotIndex] = element;
+	}
+	
+	private class RollerThread implements BukkitIntervalRunnable
+	{
+		private ImageComponent slotImage;
+		private SlotElement[] slotElements;
+		private int index;
+		
+		public RollerThread(ImageComponent slotImage, SlotElement[] slotElements, int index)
+		{
+			this.slotImage = slotImage;
+			this.slotElements = slotElements;
+			this.index = index;
+		}
+		
+		@Override
+		public void run(BukkitIntervalRunnableContext context)
+		{
+			playerGUIPage.removeComponent(slotImage.getProperties().getId());//remove the old image
+
+			if(context.containsKey("index"))
+			{
+				index = (int) context.getContextVariable("index");
+			}
+			
+			context.setContextVariable("selection", slotElements[index]);
+						
+			slotImage.setLines(imageLines.get(slotElements[index].getImageName()));
+			
+			playerGUIPage.renderComponent(slotImage);//render new image
+
+			index = (index + 1) % slotElements.length;
+			
+			Sound slotTickSound = Sound.valueOf(SlotsConfiguration.getSlotsConfiguration((Slots)plugin).getSlotTickSound());
+			if(slotTickSound != null)
+			{
+				player.playSound(player.getLocation(), slotTickSound, 0.5f, 1);
+			}
+		}
+		
+		@Override
+		public RollerThread clone()
+		{
+			return new RollerThread(slotImage, slotElements, index);
+		}
 	}
 }

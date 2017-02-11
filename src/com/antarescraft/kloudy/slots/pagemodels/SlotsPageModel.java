@@ -1,9 +1,7 @@
 package com.antarescraft.kloudy.slots.pagemodels;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
@@ -12,7 +10,6 @@ import com.antarescraft.kloudy.hologuiapi.guicomponents.ButtonComponent;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ComponentPosition;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIComponentFactory;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIPage;
-import com.antarescraft.kloudy.hologuiapi.guicomponents.ImageComponent;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.LabelComponent;
 import com.antarescraft.kloudy.hologuiapi.handlers.ClickHandler;
 import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageLoadHandler;
@@ -21,24 +18,18 @@ import com.antarescraft.kloudy.hologuiapi.plugincore.messaging.MessageManager;
 import com.antarescraft.kloudy.slots.SlotElement;
 import com.antarescraft.kloudy.slots.Slots;
 import com.antarescraft.kloudy.slots.SlotsConfiguration;
-import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnable;
-import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableContext;
 
 import net.milkbowl.vault.economy.Economy;
 
 public class SlotsPageModel extends BaseSlotsPageModel
 {
-	private PlayerGUIPage playerGUIPage;
-	
 	private SlotsConfiguration config;
 	
 	private LabelComponent buyInLabel;
 	private ButtonComponent closeButton;
 	private ButtonComponent rollButton;
 	private ButtonComponent tutorialButton;
-	
-	private static HashMap<String, String[][]> imageLines;
-	
+		
 	private Economy economy;
 	
 	public SlotsPageModel(final HoloGUIPlugin plugin, GUIPage guiPage, final Player player)
@@ -48,16 +39,6 @@ public class SlotsPageModel extends BaseSlotsPageModel
 		config = SlotsConfiguration.getSlotsConfiguration((Slots)plugin);
 		
 		economy = ((Slots)plugin).getEconomy();
-		
-		if(imageLines == null)//load the slot images if we haven't already done so
-		{
-			imageLines = new HashMap<String, String[][]>();
-			
-			for(SlotElement slotElement : SlotElement.values())
-			{
-				imageLines.put(slotElement.getImageName(), plugin.loadImage(slotElement.getImageName(), 18, 18, true));
-			}
-		}
 		
 		buyInLabel = (LabelComponent)guiPage.getComponent("buy-in");
 		closeButton = (ButtonComponent)guiPage.getComponent("close-btn");
@@ -74,8 +55,6 @@ public class SlotsPageModel extends BaseSlotsPageModel
 		buyInLabelProperties.setPosition(new ComponentPosition(0, -0.3));
 		
 		buyInLabel = GUIComponentFactory.createLabelComponent(plugin, buyInLabelProperties);
-		
-		initSlotImages();
 		
 		closeButton.registerClickHandler(player, new ClickHandler()
 		{
@@ -108,8 +87,6 @@ public class SlotsPageModel extends BaseSlotsPageModel
 				else
 				{
 					player.sendMessage(config.getNotEnoughMoneyMessage());
-					
-					return;
 				}
 			}
 		});
@@ -131,64 +108,22 @@ public class SlotsPageModel extends BaseSlotsPageModel
 			{
 				playerGUIPage = _playerGUIPage;
 				
-				//render buy-in label
+				// render buy-in label
 				playerGUIPage.renderComponent(buyInLabel);
 			}
 		});
 	}
 	
-	public class RollerThread implements BukkitIntervalRunnable
-	{
-		private ImageComponent slotImage;
-		private SlotElement[] slotElements;
-		private int index;
-		
-		public RollerThread(ImageComponent slotImage, SlotElement[] slotElements, int index)
-		{
-			this.slotImage = slotImage;
-			this.slotElements = slotElements;
-			this.index = index;
-		}
-		
-		@Override
-		public void run(BukkitIntervalRunnableContext context)
-		{
-			playerGUIPage.removeComponent(slotImage.getProperties().getId());//remove the old image
-
-			if(context.containsKey("index"))
-			{
-				index = (int) context.getContextVariable("index");
-			}
-			
-			context.setContextVariable("selection", slotElements[index]);
-						
-			slotImage.setLines(imageLines.get(slotElements[index].getImageName()));
-			
-			playerGUIPage.renderComponent(slotImage);//render new image
-
-			index = (index + 1) % slotElements.length;
-			
-			Sound slotTickSound = Sound.valueOf(SlotsConfiguration.getSlotsConfiguration((Slots)plugin).getSlotTickSound());
-			if(slotTickSound != null)
-			{
-				player.playSound(player.getLocation(), slotTickSound, 0.5f, 1);
-			}
-		}
-		
-		@Override
-		public RollerThread clone()
-		{
-			return new RollerThread(slotImage, slotElements, index);
-		}
-	}
-	
 	@Override
-	private void jackpot(SlotElement elementJackpot)
+	protected void jackpot(SlotElement elementJackpot)
 	{
-		//deposit the jackpot payout amount into the player's account
-		double payout = config.getJackpot(slotResultElements[0].getTypeId()).getPayout();
+		// deposit the jackpot payout amount into the player's account
+		double payout = config.getJackpot(elementJackpot.getTypeId()).getPayout();
 		economy.depositPlayer(player, payout);
 		
 		MessageManager.success(player, "Jackpot! You won " + payout  + economy.currencyNamePlural() + "!");
 	}
+	
+	@Override
+	public void rollComplete(){}
 }
