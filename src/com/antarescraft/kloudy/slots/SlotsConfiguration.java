@@ -50,6 +50,9 @@ public class SlotsConfiguration implements ConfigObject
 	@ConfigProperty(key = "not-enough-money")
 	private String notEnoughMoneyMessage;
 	
+	@ConfigProperty(key="already-playing")
+	private String alreadyPlayingMessage;
+	
 	@ConfigElementMap
 	@ConfigProperty(key = "jackpots")
 	private HashMap<String, Jackpot> jackpots;
@@ -67,6 +70,11 @@ public class SlotsConfiguration implements ConfigObject
 	public String getNotEnoughMoneyMessage()
 	{
 		return MessageManager.setFormattingCodes(notEnoughMoneyMessage);
+	}
+	
+	public String getAlreadyPlayingMessage()
+	{
+		return MessageManager.setFormattingCodes(alreadyPlayingMessage);
 	}
 	
 	public Jackpot getJackpot(String jackpotTypeId)

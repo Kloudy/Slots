@@ -95,6 +95,10 @@ public class SlotsPageModel extends PlayerGUIPageModel
 			public void onClick()
 			{
 				plugin.getHoloGUIApi().closeGUIPage(player);
+				
+				// Player is no longer playing, update the player's 'playing' state.
+				Slots slots = (Slots)plugin;
+				slots.isPlaying(player, false);
 			}
 		});
 		

@@ -5,6 +5,7 @@ buy-in: 5.00  #  How much money it costs to play the game for 1 roll
 ### Messaging ###
 
 not-enough-money: "&c&lSorry! You don't have enough money to play!"  # Message displayed to the player when they have less than the buy-in amount in their account
+already-playing: "&c&lYou are already playing Slots!"  # Message displayed to the player when they run command /slots play when they are already playing the game
 
 #################
 
