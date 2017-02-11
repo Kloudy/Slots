@@ -2,13 +2,11 @@ package com.antarescraft.kloudy.slots.pagemodels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
-import com.antarescraft.kloudy.hologuiapi.guicomponentproperties.ImageComponentProperties;
 import com.antarescraft.kloudy.hologuiapi.guicomponentproperties.LabelComponentProperties;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ButtonComponent;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ComponentPosition;
@@ -17,19 +15,14 @@ import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIPage;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ImageComponent;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.LabelComponent;
 import com.antarescraft.kloudy.hologuiapi.handlers.ClickHandler;
-import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageCloseHandler;
 import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageLoadHandler;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPage;
-import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPageModel;
 import com.antarescraft.kloudy.hologuiapi.plugincore.messaging.MessageManager;
 import com.antarescraft.kloudy.slots.SlotElement;
 import com.antarescraft.kloudy.slots.Slots;
 import com.antarescraft.kloudy.slots.SlotsConfiguration;
 import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnable;
 import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableContext;
-import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableTask;
-import com.antarescraft.kloudy.slots.util.BukkitIntervalRunnableScheduler;
-import com.antarescraft.kloudy.slots.util.ThreadSequenceCompleteCallback;
 
 import net.milkbowl.vault.economy.Economy;
 
@@ -187,5 +180,15 @@ public class SlotsPageModel extends BaseSlotsPageModel
 		{
 			return new RollerThread(slotImage, slotElements, index);
 		}
+	}
+	
+	@Override
+	private void jackpot(SlotElement elementJackpot)
+	{
+		//deposit the jackpot payout amount into the player's account
+		double payout = config.getJackpot(slotResultElements[0].getTypeId()).getPayout();
+		economy.depositPlayer(player, payout);
+		
+		MessageManager.success(player, "Jackpot! You won " + payout  + economy.currencyNamePlural() + "!");
 	}
 }

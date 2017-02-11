@@ -76,6 +76,8 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		});
 	}
 	
+	public abstract void jackpot(SlotElement element);
+	
 	/*
 	 *Initializes all of the dynamic gui components on the slot machine gui
 	 */
@@ -132,7 +134,7 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 	/*
 	 * Checks to see if the player won a jackpot and if so awards the player the payout
 	 */
-	private void checkJackpot()
+	private boolean checkJackpot()
 	{
 		// If a wild is rolled, set it to be the first non-wild element in the result
 		
@@ -154,11 +156,7 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		//all three slots have the same element, jackpot!
 		if(slotResultElements[0] == slotResultElements[1] && slotResultElements[0] == slotResultElements[2])
 		{
-			//deposit the jackpot payout amount into the player's account
-			double payout = config.getJackpot(slotResultElements[0].getTypeId()).getPayout();
-			economy.depositPlayer(player, payout);
-			
-			MessageManager.success(player, "Jackpot! You won " + payout  + economy.currencyNamePlural() + "!");
+			jackpot(slotResultElements[0]);
 		}
 	}
 	
@@ -208,7 +206,10 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 						SlotElement element = (SlotElement)context.getContextVariable("selection");
 						setResult(2, element);
 						
-						checkJackpot();
+						if(checkJackpot())
+						{
+							jackpot();
+						}
 						
 						isRolling = false;
 					}
