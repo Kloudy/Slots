@@ -26,7 +26,7 @@ public class Slots extends HoloGUIPlugin
 	{
 		pluginName = getName();
 				
-		setMinSupportedApiVersion("1.0.6");
+		setMinSupportedApiVersion("1.0.9");
 		checkMinApiVersion();
 		
 		SlotsConfiguration.loadConfig(this);
