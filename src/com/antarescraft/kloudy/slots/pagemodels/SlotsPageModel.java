@@ -15,6 +15,7 @@ import com.antarescraft.kloudy.hologuiapi.handlers.ClickHandler;
 import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageLoadHandler;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPage;
 import com.antarescraft.kloudy.hologuiapi.plugincore.messaging.MessageManager;
+import com.antarescraft.kloudy.slots.Jackpot;
 import com.antarescraft.kloudy.slots.SlotElement;
 import com.antarescraft.kloudy.slots.Slots;
 import com.antarescraft.kloudy.slots.SlotsConfiguration;
@@ -26,6 +27,7 @@ public class SlotsPageModel extends BaseSlotsPageModel
 	private LabelComponent buyInLabel;
 	private ButtonComponent rollButton;
 	private ButtonComponent tutorialButton;
+	private ButtonComponent closeButton;
 
 	public SlotsPageModel(final HoloGUIPlugin plugin, GUIPage guiPage, final Player player)
 	{
@@ -48,15 +50,40 @@ public class SlotsPageModel extends BaseSlotsPageModel
 		
 		buyInLabel = GUIComponentFactory.createLabelComponent(plugin, buyInLabelProperties);
 		
+		closeButton = (ButtonComponent)guiPage.getComponent("close-btn");
+		
+		closeButton.registerClickHandler(player, new ClickHandler()
+		{
+			@Override
+			public void onClick()
+			{
+				if(!isRolling)
+				{
+					plugin.getHoloGUIApi().closeGUIPage(player);
+				}
+				else
+				{
+					player.sendMessage(config.getPleaseWaitMessage());
+				}
+			}
+		});
+		
 		rollButton.registerClickHandler(player, new ClickHandler()
 		{
 			@Override
 			public void onClick()
 			{
-				if(isRolling) return;//already rolling
-				
+				if(isRolling)
+				{
+					player.sendMessage(config.getPleaseWaitMessage());
+					
+					return;
+				}
+	
 				if(economy.getBalance(player) >= config.getBuyIn())
 				{
+					player.sendMessage(MessageManager.setFormattingCodes(String.format("&6&l[Slot Machine]&r: &c-%s %s", Double.toString(config.getBuyIn()), economy.currencyNamePlural())));
+					
 					economy.withdrawPlayer(player, config.getBuyIn());//withdraw the buy-in amount from the player's account
 				
 					isRolling = true;
@@ -75,8 +102,15 @@ public class SlotsPageModel extends BaseSlotsPageModel
 			@Override
 			public void onClick()
 			{
-				TutorialPageModel model = new TutorialPageModel(plugin, plugin.getGUIPage("tutorial"), player);
-				plugin.getHoloGUIApi().openGUIPage(plugin, player, model);
+				if(!isRolling)
+				{
+					TutorialPageModel model = new TutorialPageModel(plugin, plugin.getGUIPage("tutorial"), player);
+					plugin.getHoloGUIApi().openGUIPage(plugin, player, model);
+				}
+				else
+				{
+					player.sendMessage(config.getPleaseWaitMessage());
+				}				
 			}
 		});
 				
@@ -96,11 +130,20 @@ public class SlotsPageModel extends BaseSlotsPageModel
 	@Override
 	protected void jackpot(SlotElement elementJackpot)
 	{
+		Jackpot jackpot = config.getJackpot(elementJackpot.getTypeId());
+		
 		// deposit the jackpot payout amount into the player's account
-		double payout = config.getJackpot(elementJackpot.getTypeId()).getPayout();
+		double payout = jackpot.getPayout();
 		economy.depositPlayer(player, payout);
 		
-		MessageManager.success(player, "Jackpot! You won " + payout  + economy.currencyNamePlural() + "!");
+		player.sendMessage(config.getWonJackpotMessage());
+		player.sendMessage(MessageManager.setFormattingCodes(String.format("&6&l[SlotMachine]&r: &a&o+%s %s", Double.toString(payout), economy.currencyNamePlural())));
+	}
+	
+	@Override
+	public void noJackpot()
+	{
+		player.sendMessage(config.getNoJackpotMessage());
 	}
 	
 	@Override

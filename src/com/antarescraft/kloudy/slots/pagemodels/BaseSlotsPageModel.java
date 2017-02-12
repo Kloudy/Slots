@@ -9,12 +9,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
 import com.antarescraft.kloudy.hologuiapi.guicomponentproperties.ImageComponentProperties;
-import com.antarescraft.kloudy.hologuiapi.guicomponents.ButtonComponent;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ComponentPosition;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIComponentFactory;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIPage;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ImageComponent;
-import com.antarescraft.kloudy.hologuiapi.handlers.ClickHandler;
 import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageCloseHandler;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPage;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPageModel;
@@ -36,17 +34,14 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 	private ImageComponent slot1;
 	private ImageComponent slot2;
 	private ImageComponent slot3;
-	
-	private ButtonComponent closeButton;
-	
+		
 	private BukkitIntervalRunnableScheduler slot1Roller;
 	private BukkitIntervalRunnableScheduler slot2Roller;
 	private BukkitIntervalRunnableScheduler slot3Roller;
 	
-	private static SlotElement[] slot1Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.STAR, SlotElement.COIN, SlotElement.TNT, SlotElement.WILD, SlotElement.COIN, SlotElement.TROPHY, SlotElement.WILD, SlotElement.STAR};
-	private static SlotElement[] slot2Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.STAR, SlotElement.COIN, SlotElement.TNT, SlotElement.COIN, SlotElement.TROPHY, SlotElement.STAR};
-	private static SlotElement[] slot3Elements = new SlotElement[]{SlotElement.COIN, SlotElement.RING, SlotElement.STAR, SlotElement.COIN, SlotElement.TNT, SlotElement.WILD, SlotElement.COIN, SlotElement.TROPHY, SlotElement.WILD, SlotElement.STAR};
-	
+	private static SlotElement[] slot1Elements = new SlotElement[] {SlotElement.WILD, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.WILD, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.WILD, SlotElement.COIN, SlotElement.TNT, SlotElement.WILD, SlotElement.TROPHY, SlotElement.COIN};
+	private static SlotElement[] slot2Elements = new SlotElement[] {SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.COIN, SlotElement.TROPHY, SlotElement.COIN, SlotElement.TNT};
+	private static SlotElement[] slot3Elements = new SlotElement[] {SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.COIN, SlotElement.TROPHY, SlotElement.COIN, SlotElement.TNT};	
 	//tick intervals that the slot elements change while rolling
 	private static final int[] intervals = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 7 };
 	
@@ -89,20 +84,10 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 				slots.isPlaying(player, false);
 			}
 		});
-		
-		closeButton = (ButtonComponent)guiPage.getComponent("close-btn");
-		
-		closeButton.registerClickHandler(player, new ClickHandler()
-		{
-			@Override
-			public void onClick()
-			{
-				plugin.getHoloGUIApi().closeGUIPage(player);
-			}
-		});
 	}
 	
 	protected abstract void jackpot(SlotElement element);
+	protected abstract void noJackpot();
 	protected abstract void rollComplete();
 	
 	/* 
@@ -194,6 +179,10 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		if(slotResultElements[0] == slotResultElements[1] && slotResultElements[0] == slotResultElements[2])
 		{
 			jackpot(slotResultElements[0]);
+		}
+		else
+		{
+			noJackpot();
 		}
 	}
 	

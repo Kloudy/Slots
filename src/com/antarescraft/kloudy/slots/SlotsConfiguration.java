@@ -53,6 +53,15 @@ public class SlotsConfiguration implements ConfigObject
 	@ConfigProperty(key="already-playing")
 	private String alreadyPlayingMessage;
 	
+	@ConfigProperty(key = "won-jackpot")
+	private String wonJackpotMessage;
+	
+	@ConfigProperty(key = "no-jackpot")
+	private String noJackpotMessage;
+	
+	@ConfigProperty(key = "please-wait")
+	private String pleaseWaitMessage;
+	
 	@ConfigElementMap
 	@ConfigProperty(key = "jackpots")
 	private HashMap<String, Jackpot> jackpots;
@@ -75,6 +84,21 @@ public class SlotsConfiguration implements ConfigObject
 	public String getAlreadyPlayingMessage()
 	{
 		return MessageManager.setFormattingCodes(alreadyPlayingMessage);
+	}
+	
+	public String getWonJackpotMessage()
+	{
+		return MessageManager.setFormattingCodes(wonJackpotMessage);
+	}
+	
+	public String getNoJackpotMessage()
+	{
+		return MessageManager.setFormattingCodes(noJackpotMessage);
+	}
+	
+	public String getPleaseWaitMessage()
+	{
+		return MessageManager.setFormattingCodes(pleaseWaitMessage);
 	}
 	
 	public Jackpot getJackpot(String jackpotTypeId)

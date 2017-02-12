@@ -22,9 +22,10 @@ import com.antarescraft.kloudy.slots.SlotsConfiguration;
 public class TutorialPageModel extends BaseSlotsPageModel
 {
 	private ButtonComponent doneButton;
+	private ButtonComponent closeButton;
 	private LabelComponent jackpotDetails;
 	
-	private static SlotElement[] forcedResults = new SlotElement[] { SlotElement.COIN, SlotElement.RING, SlotElement.STAR, SlotElement.TNT, SlotElement.TROPHY };
+	private static SlotElement[] forcedResults = new SlotElement[] { SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.TROPHY };
 	
 	private int resultIndex = 0;
 	
@@ -39,6 +40,17 @@ public class TutorialPageModel extends BaseSlotsPageModel
 		labelProperties.setLabelDistance(6);
 		
 		jackpotDetails = GUIComponentFactory.createLabelComponent(plugin, labelProperties);
+		
+		closeButton = (ButtonComponent)guiPage.getComponent("close-btn");
+		
+		closeButton.registerClickHandler(player, new ClickHandler()
+		{
+			@Override
+			public void onClick()
+			{
+				plugin.getHoloGUIApi().closeGUIPage(player);
+			}
+		});
 		
 		guiPage.registerPageLoadHandler(player, new GUIPageLoadHandler()
 		{
@@ -94,4 +106,7 @@ public class TutorialPageModel extends BaseSlotsPageModel
 	
 	@Override
 	public void jackpot(SlotElement element){}
+	
+	@Override
+	public void noJackpot(){}
 }

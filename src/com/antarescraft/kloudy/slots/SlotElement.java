@@ -4,9 +4,8 @@ public enum SlotElement
 {
 	WILD(null, "question-block.gif"),
 	COIN("coin-jackpot", "coin.gif"),
-	RING("ring-jackpot", "ring.gif"),
-	STAR("star-jackpot", "star.gif"),
 	TNT("tnt-jackpot", "tnt.gif"),
+	STAR("star-jackpot", "star.gif"),
 	TROPHY("trophy-jackpot", "trophy.gif");
 	
 	private String typeId;
