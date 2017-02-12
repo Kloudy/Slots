@@ -13,6 +13,16 @@ tutorial:
         x: 0.9
         y: 0.8
 
+    how-to-play:
+      type: "image"
+      image-src: "help-symbol.png"
+      width: 50
+      height: 50
+      symmetrical: true
+      position:
+        x: 0
+        y: 1.7
+
     jackpot-label:
       type: "label"
       label-distance: 6
