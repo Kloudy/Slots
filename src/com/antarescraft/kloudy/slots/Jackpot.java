@@ -15,11 +15,19 @@ public class Jackpot implements ConfigObject
 	@ConfigProperty(key = "payout")
 	private double payout;
 	
+	@ConfigProperty(key = "name")
+	private String name;
+	
 	private Jackpot(){}
 	
 	public double getPayout()
 	{
 		return payout;
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 	public String toString()

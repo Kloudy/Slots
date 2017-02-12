@@ -16,9 +16,13 @@ public class CommandEvent implements CommandExecutor
 {
 	private Slots slots;
 	
+	private SlotsConfiguration config;
+	
 	public CommandEvent(Slots plugin)
 	{
 		this.slots = plugin;
+		
+		config = SlotsConfiguration.getSlotsConfiguration(slots);
 	}
 	
 	@Override
@@ -33,6 +37,8 @@ public class CommandEvent implements CommandExecutor
 	{
 		slots.getHoloGUIApi().destroyGUIPages(slots);
 
+		slots.removeAllPlayers();
+		
 		SlotsConfiguration.loadConfig(slots);
 		
 		MessageManager.info(sender, "Reloaded the config");
@@ -44,7 +50,16 @@ public class CommandEvent implements CommandExecutor
 	{
 		Player player = (Player)sender;
 		
-		SlotsPageModel model = new SlotsPageModel(slots, slots.getGUIPage("slot-machine"), player);
-		slots.getHoloGUIApi().openGUIPage(slots, player, model);
+		if(!slots.isPlaying(player))
+		{
+			SlotsPageModel model = new SlotsPageModel(slots, slots.getGUIPage("slot-machine"), player);
+			slots.getHoloGUIApi().openGUIPage(slots, player, model);
+			
+			slots.isPlaying(player, true);
+		}
+		else
+		{
+			player.sendMessage(config.getAlreadyPlayingMessage());
+		}
 	}
 }

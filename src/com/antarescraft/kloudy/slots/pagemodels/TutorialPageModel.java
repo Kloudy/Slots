@@ -1,73 +1,112 @@
 package com.antarescraft.kloudy.slots.pagemodels;
 
+import java.util.ArrayList;
+
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
-import com.antarescraft.kloudy.hologuiapi.guicomponentproperties.ImageComponentProperties;
+import com.antarescraft.kloudy.hologuiapi.guicomponentproperties.LabelComponentProperties;
+import com.antarescraft.kloudy.hologuiapi.guicomponents.ButtonComponent;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ComponentPosition;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIComponentFactory;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.GUIPage;
-import com.antarescraft.kloudy.hologuiapi.guicomponents.ImageComponent;
+import com.antarescraft.kloudy.hologuiapi.guicomponents.LabelComponent;
+import com.antarescraft.kloudy.hologuiapi.handlers.ClickHandler;
 import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageLoadHandler;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPage;
-import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPageModel;
+import com.antarescraft.kloudy.slots.SlotElement;
+import com.antarescraft.kloudy.slots.Slots;
+import com.antarescraft.kloudy.slots.SlotsConfiguration;
 
-public class TutorialPageModel extends PlayerGUIPageModel
+public class TutorialPageModel extends BaseSlotsPageModel
 {
-	private PlayerGUIPage playerGUIPage;
+	private ButtonComponent doneButton;
+	private ButtonComponent closeButton;
+	private LabelComponent jackpotDetails;
 	
-	private ImageComponent slot1;
-	private ImageComponent slot2;
-	private ImageComponent slot3;
+	private static SlotElement[] forcedResults = new SlotElement[] { SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.TROPHY };
+	
+	private int resultIndex = 0;
 	
 	public TutorialPageModel(HoloGUIPlugin plugin, GUIPage guiPage, Player player)
 	{
 		super(plugin, guiPage, player);
 		
+		LabelComponentProperties labelProperties = new LabelComponentProperties();
+		labelProperties.setId("jackpot-details");
+		labelProperties.setLines(new ArrayList<String>());
+		labelProperties.setPosition(new ComponentPosition(0, 0.4));
+		labelProperties.setLabelDistance(6);
+		
+		jackpotDetails = GUIComponentFactory.createLabelComponent(plugin, labelProperties);
+		
+		closeButton = (ButtonComponent)guiPage.getComponent("close-btn");
+		
+		closeButton.registerClickHandler(player, new ClickHandler()
+		{
+			@Override
+			public void onClick()
+			{
+				plugin.getHoloGUIApi().closeGUIPage(player);
+			}
+		});
+		
 		guiPage.registerPageLoadHandler(player, new GUIPageLoadHandler()
 		{
 			@Override
-			public void onPageLoad(PlayerGUIPage loadedPlayerGUIPage)
+			public void onPageLoad(PlayerGUIPage _playerGUIPage)
 			{
-				playerGUIPage = loadedPlayerGUIPage;
+				playerGUIPage = _playerGUIPage;
 				
-				initSlotImages();
-				
-				
+				roll(forcedResults[resultIndex], false);
+			}
+		});
+		
+		doneButton = (ButtonComponent)guiPage.getComponent("done-btn");
+		doneButton.registerClickHandler(player, new ClickHandler()
+		{
+			@Override
+			public void onClick()
+			{
+				SlotsPageModel model = new SlotsPageModel(plugin, plugin.getGUIPage("slot-machine"), player);
+				plugin.getHoloGUIApi().openGUIPage(plugin, player, model);
 			}
 		});
 	}
 	
-	private void initSlotImages()
+	@Override
+	public void rollComplete()
 	{
-		ImageComponentProperties slot1Properties = new ImageComponentProperties();
-		slot1Properties.setId("slot1");
-		slot1Properties.setImageSource("question-block.gif");
-		slot1Properties.setSymmetrical(true);
-		slot1Properties.setWidth(18);
-		slot1Properties.setHeight(18);
-		slot1Properties.setPosition(new ComponentPosition(-0.45, 0.35));
+		SlotsConfiguration config = SlotsConfiguration.getSlotsConfiguration((Slots)plugin);
+		String jackpotName = config.getJackpot(forcedResults[resultIndex].getTypeId()).getName();
+		double payout = config.getJackpot(forcedResults[resultIndex].getTypeId()).getPayout();
 		
-		slot1 = GUIComponentFactory.createImageComponent(plugin, slot1Properties);
+		ArrayList<String> lines = new ArrayList<String>();
+		lines.add(String.format("&6&l%s", jackpotName, Double.toString(payout)));
+		lines.add("");
+		lines.add(String.format("&lPayout: &a&l%s %s", payout, economy.currencyNamePlural()));
+		jackpotDetails.setLines(lines);
 		
-		ImageComponentProperties slot2Properties = new ImageComponentProperties();
-		slot2Properties.setId("slot2");
-		slot2Properties.setImageSource("question-block.gif");
-		slot2Properties.setSymmetrical(true);
-		slot2Properties.setWidth(18);
-		slot2Properties.setHeight(18);
-		slot2Properties.setPosition(new ComponentPosition(-0, 0.38));
+		playerGUIPage.renderComponent(jackpotDetails);
 		
-		slot2 = GUIComponentFactory.createImageComponent(plugin, slot2Properties);
+		resultIndex = (resultIndex + 1) % forcedResults.length;
 		
-		ImageComponentProperties slot3Properties = new ImageComponentProperties();
-		slot3Properties.setId("slot3");
-		slot3Properties.setImageSource("question-block.gif");
-		slot3Properties.setSymmetrical(true);
-		slot3Properties.setWidth(18);
-		slot3Properties.setHeight(18);
-		slot3Properties.setPosition(new ComponentPosition(0.44, 0.35));
+		new BukkitRunnable()
+		{
+			@Override
+			public void run()
+			{
+				playerGUIPage.removeComponent("jackpot-details");
+			}
+		}.runTaskLater(plugin, 60);
 		
-		slot3 = GUIComponentFactory.createImageComponent(plugin, slot3Properties);
+		roll(forcedResults[resultIndex], 60, false); // waits a second before rolling again
 	}
+	
+	@Override
+	public void jackpot(SlotElement element){}
+	
+	@Override
+	public void noJackpot(){}
 }

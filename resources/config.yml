@@ -5,31 +5,31 @@ buy-in: 5.00  #  How much money it costs to play the game for 1 roll
 ### Messaging ###
 
 not-enough-money: "&c&lSorry! You don't have enough money to play!"  # Message displayed to the player when they have less than the buy-in amount in their account
+already-playing: "&c&lYou are already playing Slots!"  # Message displayed to the player when they run command /slots play when they are already playing the game
+won-jackpot: "&6&l[Slot Machine]&r: &a&oCongrats! You won!"  #  Message displayed to the player when they roll the slot machine and win a jackpot 
+no-jackpot: "&6&l[Slot Machine]&r: &c&oNo jackpot. Better luck next time."  # Message displayed to the player when they roll the slot machine and don't win a jackpot
+please-wait: "&6&l[Slot Machine]&r: &c&oPlease wait for the slot machine to finish rolling!"  # Message displayed to the player if they try to navigate away from the slot machine page while the slot machine is still rolling
 
 #################
 
 ###  Jackpots - This configuration defines the payout for each jackpot  ###
 ###  A player wins a jackpot when three of the same image are displayed as the result of rolling the slot machine  ###
 
+## You can edit the names and payout of the jackpots, but don't remove jackpots from this list. ##
 jackpots:
 
-  coin-jackpot:    # 1/5 (20%) chance of rolling this jackpot. This is the most common jackpot
+  coin-jackpot:    # ≈28% chance of rolling this jackpot. This is the most common jackpot
+    name: "Coin Jackpot"
     payout: 15.00  # How much money the slot machine will pay out when the player wins this jackpot
 
-  ring-jackpot:    # 1/8 (12.5%) chance of rolling this jackpot
-    payout: 20.00
+  tnt-jackpot:    # ≈28% chance of rolling this jackpot. This is the most common jackpot
+    name: "TNT Jackpot"
+    payout: 30.00  # How much money the slot machine will pay out when the player wins this jackpot
 
-  star-jackpot:    # 1/12 (8.3%) chance of rolling this jackpot
-    payout: 30.00
+  star-jackpot:    # ≈15% chance of rolling this jackpot
+    name: "Star Jackpot"
+    payout: 60.00
 
-  tnt-jackpot:     # 1/20 (5%) chance of rolling this jackpot
-    payout: 50.00
-
-  cherry-jackpot:  # 1/50 (2%) chance of rolling this jackpot
-    payout: 125.00
-
-  trophy-jackpot:  # 1/100 (1%) chance of rolling this jackpot
-    payout: 250.00
-
-  diamond-jackpot: # 1/1000 (0.1%) chance of rolling this jackpot. This is the most rare jackpot to be rolled
-    payout: 2500.00
+  trophy-jackpot:  # ≈6% chance of rolling this jackpot
+    name: "Trophy Jackpot"
+    payout: 90

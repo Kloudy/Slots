@@ -2,38 +2,53 @@ tutorial:
 
   components:
 
-    roll-btn:
-      type: "button"
-      mini: true
-      symmetrical: true
-      icon: "dice.png"
-      label: "&6&lROLL"
-      always-show-label: true
-      onclick-sound: "UI_BUTTON_CLICK"
-      position:
-        x: 0
-        y: -0.35
-
     close-btn:
       type: "button"
       label: "&lEXIT"
-      always-show-label: true
       symmetrical: true
       mini: true
       icon: "x-red.gif"
       onclick-sound: "UI_BUTTON_CLICK"
       position:
-        x: 0.8
-        y: -0.3
+        x: 0.9
+        y: 0.8
 
-    tutorial-btn:
+    jackpot-label:
+      type: "label"
+      label-distance: 6
+      text:
+        - "&lRoll 3 of the same item to win the jackpot!"
+      position:
+        x: 0
+        y: 0.55
+
+    wild-label:
+      type: "label"
+      label-distance: 6
+      text:
+        - "&lThe wild block can be ANY item"
+      position:
+        x: 0
+        y: -0.2
+
+    wild-img:
+      type: "image"
+      image-src: "question-block.gif"
+      width: 18
+      height: 18
+      symmetrical: true
+      position:
+        x: 0
+        y: -0.2
+
+    done-btn:
       type: "button"
       mini: true
-      label: "&lHow to Play"
-      symmetrical: true
+      icon: "confirm.png"
+      label: "&lGot It!"
       always-show-label: true
-      icon: "question-mark.png"
+      symmetrical: true
       onclick-sound: "UI_BUTTON_CLICK"
       position:
-        x: -0.8
+        x: 0.9
         y: -0.3

@@ -17,7 +17,6 @@ slot-machine:
     close-btn:
       type: "button"
       label: "&lEXIT"
-      always-show-label: true
       symmetrical: true
       mini: true
       icon: "x-red.gif"
