@@ -107,7 +107,7 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 	{		
 		ImageComponentProperties slot1Properties = new ImageComponentProperties();
 		slot1Properties.setId("slot1");
-		slot1Properties.setImageSource("question-block.gif");
+		slot1Properties.setImageSource("star.gif");
 		slot1Properties.setSymmetrical(true);
 		slot1Properties.setWidth(18);
 		slot1Properties.setHeight(18);
@@ -117,7 +117,7 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		
 		ImageComponentProperties slot2Properties = new ImageComponentProperties();
 		slot2Properties.setId("slot2");
-		slot2Properties.setImageSource("question-block.gif");
+		slot2Properties.setImageSource("star.gif");
 		slot2Properties.setSymmetrical(true);
 		slot2Properties.setWidth(18);
 		slot2Properties.setHeight(18);
@@ -127,7 +127,7 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		
 		ImageComponentProperties slot3Properties = new ImageComponentProperties();
 		slot3Properties.setId("slot3");
-		slot3Properties.setImageSource("question-block.gif");
+		slot3Properties.setImageSource("star.gif");
 		slot3Properties.setSymmetrical(true);
 		slot3Properties.setWidth(18);
 		slot3Properties.setHeight(18);
