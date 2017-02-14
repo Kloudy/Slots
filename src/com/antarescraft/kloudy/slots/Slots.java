@@ -29,6 +29,8 @@ public class Slots extends HoloGUIPlugin
 		setMinSupportedApiVersion("1.0.9");
 		checkMinApiVersion();
 		
+		getHoloGUIApi().hookHoloGUIPlugin(this);
+		
 		SlotsConfiguration.loadConfig(this);
 		
 		getCommand("slots").setExecutor(new CommandEvent(this));
@@ -45,6 +47,7 @@ public class Slots extends HoloGUIPlugin
 	public void onDisable()
 	{
 		getHoloGUIApi().destroyGUIPages(this);
+		getHoloGUIApi().unhookHoloGUIPlugin(this);
 		
 		players.clear();
 	}
