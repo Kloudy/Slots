@@ -13,15 +13,24 @@ tutorial:
         x: 0.9
         y: 0.8
 
+    how-to-play-text:
+      type: "label"
+      label-distance: 6
+      text:
+        - "%scroll%     &b&lHOW TO PLAY&r     "
+      position:
+        x: 0
+        y: 0.8
+
     how-to-play:
       type: "image"
-      image-src: "help-symbol.png"
-      width: 50
-      height: 50
+      image-src: "question-mark.png"
+      width: 40
+      height: 40
       symmetrical: true
       position:
         x: 0
-        y: 1.7
+        y: 1.8
 
     jackpot-label:
       type: "label"
