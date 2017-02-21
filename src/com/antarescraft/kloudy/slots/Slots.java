@@ -23,6 +23,8 @@ public abstract class Slots extends HoloGUIPlugin
 	@Override
 	public void onEnable()
 	{	
+		pluginName = getName();
+		
 		setMinSupportedApiVersion("1.0.9");
 		checkMinApiVersion();
 		
