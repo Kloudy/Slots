@@ -9,13 +9,12 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
 import com.antarescraft.kloudy.hologuiapi.plugincore.messaging.MessageManager;
-import com.antarescraft.kloudy.slots.events.CommandEvent;
 
 import net.milkbowl.vault.economy.Economy;
 
-public class Slots extends HoloGUIPlugin
+public abstract class Slots extends HoloGUIPlugin
 {	
-	public static String pluginName;
+	public static String pluginName = null;
 	
 	private Economy economy;
 	
@@ -23,18 +22,14 @@ public class Slots extends HoloGUIPlugin
 	
 	@Override
 	public void onEnable()
-	{
-		pluginName = getName();
-				
+	{	
 		setMinSupportedApiVersion("1.0.9");
 		checkMinApiVersion();
 		
 		getHoloGUIApi().hookHoloGUIPlugin(this);
 		
 		SlotsConfiguration.loadConfig(this);
-		
-		getCommand("slots").setExecutor(new CommandEvent(this));
-		
+				
 		copyResourceConfigs(true);
 		
 		if(!setupEconomy())
