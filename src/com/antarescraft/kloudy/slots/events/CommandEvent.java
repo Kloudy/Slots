@@ -14,9 +14,9 @@ import com.antarescraft.kloudy.slots.pagemodels.SlotsPageModel;
 
 public class CommandEvent implements CommandExecutor
 {
-	private Slots slots;
+	protected Slots slots;
 	
-	private SlotsConfiguration config;
+	protected SlotsConfiguration config;
 	
 	public CommandEvent(Slots plugin)
 	{
