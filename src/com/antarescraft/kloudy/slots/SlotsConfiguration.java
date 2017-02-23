@@ -22,10 +22,7 @@ public class SlotsConfiguration implements ConfigObject
 		slots.reloadConfig();
 		slots.loadGUIPages();
 		
-		if(instance == null)
-		{
-			instance = ConfigParser.parse(slots.getConfig(), SlotsConfiguration.class, Slots.pluginName);
-		}
+		instance = ConfigParser.parse(slots.getConfig(), SlotsConfiguration.class, Slots.pluginName);
 	}
 	
 	public static SlotsConfiguration getSlotsConfiguration(Slots slots)
@@ -108,25 +105,7 @@ public class SlotsConfiguration implements ConfigObject
 	
 	public String toString()
 	{
-		StringBuilder strBuilder = new StringBuilder();
-		strBuilder.append("{")
-					.append("slotTickSound: " + slotTickSound + ",")
-					.append("buyIn: " + buyIn + ",")
-					.append("jackpots: ");
-		
-		if(jackpots != null)
-		{
-			strBuilder.append("[");
-			for(Jackpot jackpot : jackpots.values())
-			{
-				strBuilder.append(jackpot.toString() + ",");
-			}
-			strBuilder.append("]");
-		}
-		
-		strBuilder.append("}");
-		
-		return strBuilder.toString();	
+		return ConfigParser.generateConfigString(Slots.pluginName, this);	
 	}
 
 	@Override
