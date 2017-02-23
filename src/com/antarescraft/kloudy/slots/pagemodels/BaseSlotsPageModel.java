@@ -40,7 +40,7 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 	private BukkitIntervalRunnableScheduler slot3Roller;
 	
 	private static SlotElement[] slot1Elements = new SlotElement[] {SlotElement.WILD, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.WILD, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.WILD, SlotElement.COIN, SlotElement.TNT, SlotElement.WILD, SlotElement.TROPHY, SlotElement.COIN};
-	private static SlotElement[] slot2Elements = new SlotElement[] {SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.COIN, SlotElement.TROPHY, SlotElement.COIN, SlotElement.TNT};
+	private static SlotElement[] slot2Elements = new SlotElement[] {SlotElement.WILD, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.WILD, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.COIN, SlotElement.TROPHY, SlotElement.COIN, SlotElement.TNT};
 	private static SlotElement[] slot3Elements = new SlotElement[] {SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.COIN, SlotElement.TROPHY, SlotElement.COIN, SlotElement.TNT};	
 	//tick intervals that the slot elements change while rolling
 	private static final int[] intervals = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 7 };
