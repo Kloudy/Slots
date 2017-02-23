@@ -18,18 +18,18 @@ please-wait: "&6&l[Slot Machine]&r: &c&oPlease wait for the slot machine to fini
 ## You can edit the names and payout of the jackpots, but don't remove jackpots from this list. ##
 jackpots:
 
-  coin-jackpot:    # ≈28% chance of rolling this jackpot. This is the most common jackpot
+  coin-jackpot:    # ≈11% chance of rolling this jackpot. This is the most common jackpot
     name: "Coin Jackpot"
     payout: 15.00  # How much money the slot machine will pay out when the player wins this jackpot
 
-  tnt-jackpot:    # ≈28% chance of rolling this jackpot. This is the most common jackpot
+  tnt-jackpot:    # ≈6% chance of rolling this jackpot. This is the most common jackpot
     name: "TNT Jackpot"
     payout: 30.00  # How much money the slot machine will pay out when the player wins this jackpot
 
-  star-jackpot:    # ≈15% chance of rolling this jackpot
+  star-jackpot:    # ≈3% chance of rolling this jackpot
     name: "Star Jackpot"
     payout: 60.00
 
-  trophy-jackpot:  # ≈6% chance of rolling this jackpot
+  trophy-jackpot:  # ≈1% chance of rolling this jackpot. This is the most rare jackpot.
     name: "Trophy Jackpot"
     payout: 90
