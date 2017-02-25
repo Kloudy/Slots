@@ -25,7 +25,7 @@ public abstract class Slots extends HoloGUIPlugin
 	{	
 		pluginName = getName();
 				
-		setMinSupportedApiVersion("1.1.1");
+		setMinSupportedApiVersion("1.1.2");
 		checkMinApiVersion();
 		
 		getHoloGUIApi().hookHoloGUIPlugin(this);
