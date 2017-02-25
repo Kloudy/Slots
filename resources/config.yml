@@ -1,4 +1,4 @@
-slot-tick-sound: "BLOCK_NOTE_HARP"  #Sound the plays when the player rolls the slot machine
+slot-tick-sound: "BLOCK_NOTE_HARP"  #Sound that plays when the player rolls the slot machine
 
 buy-in: 5.00  #  How much money it costs to play the game for 1 roll
 
@@ -15,7 +15,7 @@ please-wait: "&6&l[Slot Machine]&r: &c&oPlease wait for the slot machine to fini
 ###  Jackpots - This configuration defines the payout for each jackpot  ###
 ###  A player wins a jackpot when three of the same image are displayed as the result of rolling the slot machine  ###
 
-## You can edit the names and payout of the jackpots, but don't remove jackpots from this list. ##
+## You can edit the names and payout of the jackpots, but don't remove or add jackpots to this list. ##
 jackpots:
 
   coin-jackpot:    # ≈11% chance of rolling this jackpot. This is the most common jackpot
