@@ -53,7 +53,7 @@ public class CommandEvent implements CommandExecutor
 		if(!slots.isPlaying(player))
 		{
 			SlotsPageModel model = new SlotsPageModel(slots, slots.getGUIPage("slot-machine"), player);
-			slots.getHoloGUIApi().openGUIPage(slots, player, model);
+			slots.getHoloGUIApi().openGUIPage(slots, model);
 			
 			slots.isPlaying(player, true);
 		}

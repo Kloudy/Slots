@@ -70,7 +70,7 @@ public class TutorialPageModel extends BaseSlotsPageModel
 			public void onClick()
 			{
 				SlotsPageModel model = new SlotsPageModel(plugin, plugin.getGUIPage("slot-machine"), player);
-				plugin.getHoloGUIApi().openGUIPage(plugin, player, model);
+				plugin.getHoloGUIApi().openGUIPage(plugin, model);
 			}
 		});
 	}

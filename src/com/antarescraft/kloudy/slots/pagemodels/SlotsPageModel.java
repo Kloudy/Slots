@@ -105,7 +105,7 @@ public class SlotsPageModel extends BaseSlotsPageModel
 				if(!isRolling)
 				{
 					TutorialPageModel model = new TutorialPageModel(plugin, plugin.getGUIPage("tutorial"), player);
-					plugin.getHoloGUIApi().openGUIPage(plugin, player, model);
+					plugin.getHoloGUIApi().openGUIPage(plugin, model);
 				}
 				else
 				{
