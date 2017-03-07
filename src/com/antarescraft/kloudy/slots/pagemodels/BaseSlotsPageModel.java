@@ -16,6 +16,8 @@ import com.antarescraft.kloudy.hologuiapi.guicomponents.ImageComponent;
 import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageCloseHandler;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPage;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPageModel;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigObject;
+import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigParser;
 import com.antarescraft.kloudy.slots.SlotElement;
 import com.antarescraft.kloudy.slots.Slots;
 import com.antarescraft.kloudy.slots.SlotsConfiguration;
@@ -115,6 +117,8 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		
 		slot1 = GUIComponentFactory.createImageComponent(plugin, slot1Properties);
 		
+		System.out.println("Slot 1 propreties: " + ConfigParser.generateConfigString(Slots.pluginName, (ConfigObject)slot1.getProperties()));
+		
 		ImageComponentProperties slot2Properties = new ImageComponentProperties();
 		slot2Properties.setId("slot2");
 		slot2Properties.setImageSource("question-block.gif");
@@ -125,6 +129,8 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		
 		slot2 = GUIComponentFactory.createImageComponent(plugin, slot2Properties);
 		
+		System.out.println("Slot 2 propreties: " + ConfigParser.generateConfigString(Slots.pluginName, (ConfigObject)slot2.getProperties()));
+		
 		ImageComponentProperties slot3Properties = new ImageComponentProperties();
 		slot3Properties.setId("slot3");
 		slot3Properties.setImageSource("question-block.gif");
@@ -134,6 +140,8 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		slot3Properties.setPosition(new ComponentPosition(0.44, 0.35));
 		
 		slot3 = GUIComponentFactory.createImageComponent(plugin, slot3Properties);
+		
+		System.out.println("Slot 3 propreties: " + ConfigParser.generateConfigString(Slots.pluginName, (ConfigObject)slot3.getProperties()));
 	}
 	
 	/*
