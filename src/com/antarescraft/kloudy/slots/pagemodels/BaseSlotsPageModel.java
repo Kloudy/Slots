@@ -7,6 +7,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.antarescraft.kloudy.hologuiapi.HoloGUIApi;
 import com.antarescraft.kloudy.hologuiapi.HoloGUIPlugin;
 import com.antarescraft.kloudy.hologuiapi.guicomponentproperties.ImageComponentProperties;
 import com.antarescraft.kloudy.hologuiapi.guicomponents.ComponentPosition;
@@ -16,8 +17,6 @@ import com.antarescraft.kloudy.hologuiapi.guicomponents.ImageComponent;
 import com.antarescraft.kloudy.hologuiapi.handlers.GUIPageCloseHandler;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPage;
 import com.antarescraft.kloudy.hologuiapi.playerguicomponents.PlayerGUIPageModel;
-import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigObject;
-import com.antarescraft.kloudy.hologuiapi.plugincore.config.ConfigParser;
 import com.antarescraft.kloudy.slots.SlotElement;
 import com.antarescraft.kloudy.slots.Slots;
 import com.antarescraft.kloudy.slots.SlotsConfiguration;
@@ -44,6 +43,7 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 	private static SlotElement[] slot1Elements = new SlotElement[] {SlotElement.WILD, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.WILD, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.WILD, SlotElement.COIN, SlotElement.TNT, SlotElement.WILD, SlotElement.TROPHY, SlotElement.COIN};
 	private static SlotElement[] slot2Elements = new SlotElement[] {SlotElement.WILD, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.WILD, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.COIN, SlotElement.TROPHY, SlotElement.COIN, SlotElement.TNT};
 	private static SlotElement[] slot3Elements = new SlotElement[] {SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.COIN, SlotElement.TNT, SlotElement.STAR, SlotElement.COIN, SlotElement.TROPHY, SlotElement.COIN, SlotElement.TNT};	
+	
 	//tick intervals that the slot elements change while rolling
 	private static final int[] intervals = new int[] { 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 7 };
 	
@@ -116,9 +116,7 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		slot1Properties.setPosition(new ComponentPosition(-0.45, 0.35));
 		
 		slot1 = GUIComponentFactory.createImageComponent(plugin, slot1Properties);
-		
-		System.out.println("Slot 1 propreties: " + ConfigParser.generateConfigString(Slots.pluginName, (ConfigObject)slot1.getProperties()));
-		
+				
 		ImageComponentProperties slot2Properties = new ImageComponentProperties();
 		slot2Properties.setId("slot2");
 		slot2Properties.setImageSource("question-block.gif");
@@ -128,9 +126,7 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		slot2Properties.setPosition(new ComponentPosition(0, 0.38));
 		
 		slot2 = GUIComponentFactory.createImageComponent(plugin, slot2Properties);
-		
-		System.out.println("Slot 2 propreties: " + ConfigParser.generateConfigString(Slots.pluginName, (ConfigObject)slot2.getProperties()));
-		
+				
 		ImageComponentProperties slot3Properties = new ImageComponentProperties();
 		slot3Properties.setId("slot3");
 		slot3Properties.setImageSource("question-block.gif");
@@ -139,9 +135,7 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		slot3Properties.setHeight(18);
 		slot3Properties.setPosition(new ComponentPosition(0.44, 0.35));
 		
-		slot3 = GUIComponentFactory.createImageComponent(plugin, slot3Properties);
-		
-		System.out.println("Slot 3 propreties: " + ConfigParser.generateConfigString(Slots.pluginName, (ConfigObject)slot3.getProperties()));
+		slot3 = GUIComponentFactory.createImageComponent(plugin, slot3Properties);		
 	}
 	
 	/*
@@ -187,10 +181,16 @@ public abstract class BaseSlotsPageModel extends PlayerGUIPageModel
 		if(slotResultElements[0] == slotResultElements[1] && slotResultElements[0] == slotResultElements[2])
 		{
 			jackpot(slotResultElements[0]);
+			
+			HoloGUIApi.debugMessage(String.format("Jackpot: [%s, %s, %s]", 
+					slotResultElements[0].toString(), slotResultElements[1], slotResultElements[2]));
 		}
 		else
 		{
 			noJackpot();
+			
+			HoloGUIApi.debugMessage(String.format("No Jackpot: [%s, %s, %s]", 
+					slotResultElements[0].toString(), slotResultElements[1], slotResultElements[2]));
 		}
 	}
 	
